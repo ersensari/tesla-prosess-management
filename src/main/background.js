@@ -1,17 +1,41 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, ipcMain } from "electron";
-import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
-import electronLocalshortcut from "electron-localshortcut";
-import path from "path";
-import electron_data from "electron-data";
-import modules from "./modules";
+const {
+  app,
+  protocol,
+  BrowserWindow,
+  Menu,
+  ipcMain,
+  session,
+} = require("electron");
+const { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
+const electronLocalshortcut = require("electron-localshortcut");
+const path = require("path");
+const electron_data = require("electron-data");
+const modules = require("./modules");
+const { readFile, stat } = require("fs");
+
+const appPath =
+  process.env.NODE_ENV === "production"
+    ? `${process.resourcesPath}/app`
+    : __dirname;
 
 electron_data.config({
   filename: "user.json",
-  path: __dirname,
+  path: appPath,
   autosave: true,
   lastUpdate: true,
+});
+
+stat(appPath + "/user.json", (err, stats) => {
+  if (!err) {
+    readFile(appPath + "/user.json", { encoding: "utf-8" }, (_, data) => {
+      electron_data.set(
+        "topWindowLocation",
+        JSON.parse(data).topWindowLocation
+      );
+    });
+  }
 });
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -27,6 +51,7 @@ async function createTopWindow() {
   if (await electron_data.has("topWindowLocation")) {
     pos = await electron_data.get("topWindowLocation");
   }
+
   topWindow = new BrowserWindow({
     ...pos,
     width: 64,
@@ -67,8 +92,8 @@ async function createTopWindow() {
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1024,
-    height: 750,
+    width: 1440,
+    height: 900,
     icon: "tesla-icon.ico",
     webPreferences: {
       contextIsolation: false,
@@ -113,7 +138,7 @@ async function createWindow() {
 async function setMainMenu() {
   const template = [
     {
-      label: "Tesla Proses Yönetimi",
+      label: "Tesla Üretim Yönetimi",
       submenu: [
         {
           label: "Quit",
@@ -132,6 +157,8 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+
+  session.defaultSession.clearStorageData();
 });
 
 app.on("activate", () => {

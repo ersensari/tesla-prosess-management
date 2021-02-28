@@ -1,7 +1,9 @@
-const tedious = require("tedious");
+"use strict";
 const { Sequelize, DATE } = require("sequelize");
+const models = require("./models/all");
 
-const models = require("./models/all").default;
+const env = process.env.NODE_ENV || "development";
+const config = require("../config/database.json")[env];
 
 const db = {};
 
@@ -14,13 +16,13 @@ DATE.prototype._stringify = function _stringify(date, options) {
 };
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
+  config.database,
+  config.username,
+  config.password,
   {
-    host: process.env.DB_ADDRESS,
+    host: config.host,
     dialect: "mssql",
-    dialectModule: tedious,
+    dialectModule: require("tedious"),
   }
 );
 
@@ -38,4 +40,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export default db;
+module.exports = db;

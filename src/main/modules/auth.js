@@ -1,7 +1,7 @@
-import { ipcMain } from "electron";
-import userRepo from "../database/repositories/user";
+const { ipcMain } = require("electron");
+const userRepo = require("../database/repositories/user");
 
-export default async function () {
+module.exports = async () => {
   ipcMain.on("login", async (event, payload) => {
     try {
       const context = await userRepo.auth.login(JSON.parse(payload));
@@ -10,4 +10,4 @@ export default async function () {
       event.reply("loginError", { code: 401, message: error.message });
     }
   });
-}
+};

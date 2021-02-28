@@ -1,0 +1,131 @@
+@mixin do-box-shadow() {
+  -webkit-box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  -moz-box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+}
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+}
+#app {
+  height: 100%;
+  width: 100%;
+
+  .main-layout {
+    height: 100%;
+    width: 100%;
+  }
+
+  .layout-header {
+    background: #fff;
+    padding: 0 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .layout-content {
+    margin: 24px 16px;
+    padding: 2px;
+    background: #fff;
+    height: 100%;
+  }
+
+  .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .trigger:hover {
+    color: #1890ff;
+  }
+
+  .logo {
+    height: 64px;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 16px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    .vertical {
+      transform: rotate(-90deg);
+      height: 16px;
+    }
+    img {
+      height: 32px;
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    -o-animation: fadeIn ease 1s;
+    -ms-animation: fadeIn ease 1s;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-moz-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-o-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-ms-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+.shadowed-box {
+  @include do-box-shadow();
+  background: rgba(255, 255, 255, 1);
+  padding: 25px 25px;
+  border: 1px rgba(223, 225, 229, 1) solid;
+  border-radius: 6px;
+  font-weight: bold;
+
+  h1 {
+    font-size: 28px;
+    font-weight: bold;
+    @media (max-width: 576px) {
+      font-size: 20px;
+    }
+  }
+}

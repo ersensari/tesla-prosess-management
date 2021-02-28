@@ -1,39 +1,39 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('RawMaterials', {
+    await queryInterface.createTable("RawMaterials", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       shortName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       sapCode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       rawNo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       explanation: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('RawMaterials');
-  }
+    await queryInterface.dropTable("RawMaterials");
+  },
 };

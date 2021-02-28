@@ -7,13 +7,25 @@ module.exports = {
       [
         {
           name: "admin",
-          title: "Yönetici",
+          title: "Süper Yönetici",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           name: "operator",
           title: "Operatör",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: "supervizor",
+          title: "Vardiya Amiri",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: "manager",
+          title: "Yönetici",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -27,8 +39,7 @@ module.exports = {
       {}
     );
   },
-
-  down: async (queryInterface, Sequelize) => {
+  down: (queryInterface, Sequelize) => {
     /**
      * Add commands to revert seed here.
      *

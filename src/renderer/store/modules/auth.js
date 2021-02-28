@@ -1,10 +1,9 @@
 import { ipcRenderer } from "electron";
 import { ref } from "vue";
 
-const AUTH_KEY = "tesla_auth_token";
-let loading = ref(false);
+const loading = ref(false);
 const state = {
-  authenticating: ref(loading),
+  authenticating: loading,
   token: undefined,
   user: undefined,
   error: undefined,
@@ -15,16 +14,13 @@ const mutations = {
     state.error = error;
     state.user = undefined;
     state.token = undefined;
-    window.localStorage.removeItem(AUTH_KEY);
   },
   setToken: (state, context) => {
-    window.localStorage.setItem(AUTH_KEY, context.token);
     state.token = context.token;
     state.user = context.user;
     state.error = undefined;
   },
   removeToken: (state) => {
-    window.localStorage.removeItem(AUTH_KEY);
     state.token = undefined;
     state.user = undefined;
     state.error = undefined;

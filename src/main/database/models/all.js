@@ -1,8 +1,8 @@
-import Role from "./role";
-import User from "./user";
-import RawMaterial from "./rawmaterial";
-import Silo from "./silo";
-import DosingGroup from "./dosinggroup";
-import DosingGroupSilo from "./dosinggroupsilo";
+const Role = require("./role");
+const User = require("./user");
+const RawMaterial = require("./rawmaterial");
+const Silo = require("./silo");
+const DosingGroup = require("./dosinggroup");
+const DosingGroupSilo = require("./dosinggroupsilo");
 
-export default [Role, User, Silo, RawMaterial, DosingGroup, DosingGroupSilo];
+module.exports = [Role, User, Silo, RawMaterial, DosingGroup, DosingGroupSilo];
