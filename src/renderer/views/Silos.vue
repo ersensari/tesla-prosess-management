@@ -136,16 +136,18 @@
           </a-table>
         </div>
         <template #footer>
-          <a-button key="back" @click="onModalCancelClick" :disabled="loading"
-            >İptal</a-button
-          >
-          <a-button
-            key="submit"
-            type="primary"
-            :loading="loading"
-            @click="onModalSaveClick"
-            >Kaydet</a-button
-          >
+          <div style="display: flex; justify-content: space-between">
+            <a-button key="back" @click="onModalCancelClick" :disabled="loading"
+              >İptal</a-button
+            >
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="onModalSaveClick"
+              >Kaydet</a-button
+            >
+          </div>
         </template>
       </a-modal>
     </a-row>

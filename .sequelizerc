@@ -1,5 +1,5 @@
 const { resolve } = require( 'path');
-require("babel-register");
+
 module.exports = {
   'config': resolve('src','main','config', 'database.json'),
   'models-path': resolve('src','main','database', 'models'),

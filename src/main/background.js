@@ -9,7 +9,7 @@ const {
   session,
 } = require("electron");
 const { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
-const electronLocalshortcut = require("electron-localshortcut");
+//const electronLocalshortcut = require("electron-localshortcut");
 const path = require("path");
 const electron_data = require("electron-data");
 const modules = require("./modules");
@@ -92,8 +92,9 @@ async function createTopWindow() {
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1440,
+    width: 1680,
     height: 900,
+    minWidth: 1680,
     icon: "tesla-icon.ico",
     webPreferences: {
       contextIsolation: false,
@@ -107,16 +108,16 @@ async function createWindow() {
       topWindow.close();
     }
 
-    electronLocalshortcut.register(
-      win,
-      ["CommandOrControl+R", "CommandOrControl+Shift+R", "F5"],
-      () => {}
-    );
+    // electronLocalshortcut.register(
+    //   win,
+    //   ["CommandOrControl+R", "CommandOrControl+Shift+R", "F5"],
+    //   () => {}
+    // );
   });
 
   win.on("blur", (event) => {
     createTopWindow();
-    electronLocalshortcut.unregisterAll(win);
+    //electronLocalshortcut.unregisterAll(win);
   });
 
   ipcMain.on("openMainWindow", () => {
@@ -141,8 +142,29 @@ async function setMainMenu() {
       label: "Tesla Üretim Yönetimi",
       submenu: [
         {
-          label: "Quit",
+          label: "Yenile",
+          role: "reload",
+        },
+        {
+          label: "Çıkış",
           role: "quit",
+        },
+      ],
+    },
+    {
+      label: "Düzenle",
+      submenu: [
+        {
+          label: "Kopyala",
+          role: "copy",
+        },
+        {
+          label: "Kes",
+          role: "cut",
+        },
+        {
+          label: "Yapıştır",
+          role: "paste",
         },
       ],
     },

@@ -143,20 +143,20 @@
           span: 14,
         }"
       >
-        <a-form-item label="No" v-bind="validateInfos.rawNo">
-          <a-input v-model:value="modelRef.rawNo" />
+        <a-form-item label="No" v-bind="validateInfos['form.rawNo']">
+          <a-input v-model:value="modelRef.form.rawNo" />
         </a-form-item>
-        <a-form-item label="Adı" v-bind="validateInfos.name">
-          <a-input v-model:value="modelRef.name" />
+        <a-form-item label="Adı" v-bind="validateInfos['form.name']">
+          <a-input v-model:value="modelRef.form.name" />
         </a-form-item>
-        <a-form-item label="Kısa Adı" v-bind="validateInfos.shortName">
-          <a-input v-model:value="modelRef.shortName" />
+        <a-form-item label="Kısa Adı" v-bind="validateInfos['form.shortName']">
+          <a-input v-model:value="modelRef.form.shortName" />
         </a-form-item>
-        <a-form-item label="SAP Kodu" v-bind="validateInfos.sapCode">
-          <a-input v-model:value="modelRef.sapCode" />
+        <a-form-item label="SAP Kodu" v-bind="validateInfos['form.sapCode']">
+          <a-input v-model:value="modelRef.form.sapCode" />
         </a-form-item>
         <a-form-item label="Açıklama">
-          <a-input v-model:value="modelRef.explanation" />
+          <a-input v-model:value="modelRef.form.explanation" />
         </a-form-item>
       </a-form>
       <template #footer>
@@ -167,7 +167,7 @@
           key="submit"
           type="primary"
           :loading="loading"
-          @click="onModalSaveClick"
+          @click.prevent="onModalSaveClick"
           >Kaydet</a-button
         >
       </template>
@@ -226,25 +226,32 @@ export default defineComponent({
     );
 
     const { setEditMode } = useMutations(["setEditMode"], "rawMaterial");
-    const modelRef = ref({
-      id: null,
-      name: "",
-      shortName: "",
-      sapCode: "",
-      rawNo: "",
-      explanation: "",
+    const modelRef = reactive({
+      form: {
+        id: undefined,
+        name: "",
+        shortName: "",
+        sapCode: "",
+        rawNo: "",
+        explanation: "",
+      },
     });
 
     const rulesRef = reactive({
-      name: [{ required: true, message: "Malzeme Adı Alanı Zorunlu." }],
-      shortName: [
+      "form.name": [{ required: true, message: "Malzeme Adı Alanı Zorunlu." }],
+      "form.shortName": [
         { required: true, message: "Malzeme Kısa Adı Alanı Zorunlu." },
       ],
-      sapCode: [{ required: true, message: "SAP Kodu Alanı Zorunlu." }],
-      rawNo: [{ required: true, message: "Malzeme Kodu Alanı Zorunlu." }],
+      "form.sapCode": [{ required: true, message: "SAP Kodu Alanı Zorunlu." }],
+      "form.rawNo": [
+        { required: true, message: "Malzeme Kodu Alanı Zorunlu." },
+      ],
     });
 
-    const { validate, validateInfos } = useForm(modelRef, rulesRef);
+    const { validate, validateInfos, resetFields } = useForm(
+      modelRef,
+      rulesRef
+    );
 
     const filterMethods = (columnName) => {
       return {
@@ -325,30 +332,29 @@ export default defineComponent({
     };
 
     const onNewClick = () => {
-      modelRef.value = {};
+      resetFields();
       editModalTitle.value = "Yeni Ekle";
       setEditMode(true);
     };
 
     const onEditClick = (item) => {
-      modelRef.value = item;
+      modelRef.form = item;
       setEditMode(true);
       editModalTitle.value = "Düzenle";
     };
-    const onModalSaveClick = (e) => {
-      e.preventDefault();
+    const onModalSaveClick = () => {
       validate()
         .then(() => {
-          if (modelRef.value.id) {
-            update(toRaw(modelRef.value));
+          if (modelRef.form.id) {
+            update(toRaw(modelRef.form));
           } else {
-            save(toRaw(modelRef.value));
+            save(toRaw(modelRef.form.details));
           }
         })
         .catch((err) => {
           showNotify["error"]({
-            message: "Hata oluştu!",
-            description: err.message,
+            message: "Veri giriş hatası!",
+            description: "Lütfen formu kontrol ediniz.",
           });
         });
     };

@@ -150,7 +150,7 @@ export default defineComponent({
     const { user } = useState(["user"], "auth");
     const pageKey = inject("pageKey", 1);
 
-    const selectedKeys = ref([pageKey.value]);
+    const selectedKeys = ref([]);
     const openKeys = ref([""]);
     const collapsed = ref(false);
 
@@ -166,6 +166,10 @@ export default defineComponent({
       if (route) {
         router.push(route);
       }
+    });
+
+    watch(pageKey, (val) => {
+      selectedKeys.value.push(val);
     });
 
     const { logout } = useActions(["logout"], "auth");
