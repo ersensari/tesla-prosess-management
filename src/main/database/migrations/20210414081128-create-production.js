@@ -98,7 +98,7 @@ module.exports = {
       },
       productionAmount: {
         type: Sequelize.DECIMAL(10, 3),
-        allowNull: false,
+        allowNull: true,
         default: 0,
       },
       createdAt: {

@@ -9,6 +9,11 @@ const {
   session,
 } = require("electron");
 const { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
+const {
+  default: installExtension,
+  VUEJS3_DEVTOOLS,
+} = require("electron-devtools-installer");
+
 //const electronLocalshortcut = require("electron-localshortcut");
 const path = require("path");
 const electron_data = require("electron-data");
@@ -128,7 +133,9 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    if (!process.env.IS_TEST) {
+      win.webContents.openDevTools();
+    }
   } else {
     createProtocol("app");
     // Load the index.html when not in development
@@ -193,6 +200,10 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  installExtension(VUEJS3_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log("An error occurred: ", err));
+
   createWindow();
   setMainMenu();
   modules.forEach((m) => m());

@@ -5,10 +5,11 @@ import Home from "../views/Home";
 const routes = [
   {
     path: "/",
-    name: "Gösterge Paneli",
     component: Home,
+    name: "home",
     meta: {
       key: "1",
+      title: "Gösterge Paneli",
       roles: {
         viewers: ["all"],
       },
@@ -16,13 +17,14 @@ const routes = [
   },
   {
     path: "/raw-materials",
-    name: "Hammaddeler",
+    name: "raw-materials",
     component: () =>
       import(
         /* webpackChunkName: "raw-materials" */ "../views/RawMaterials.vue"
       ),
     meta: {
       key: "2",
+      title: "Hammaddeler",
       roles: {
         modifiers: ["admin", "supervizor"],
         viewers: ["operator", "manager"],
@@ -31,11 +33,12 @@ const routes = [
   },
   {
     path: "/silos",
-    name: "Silo Tanımları",
+    name: "silos",
     component: () =>
       import(/* webpackChunkName: "silos" */ "../views/Silos.vue"),
     meta: {
       key: "3",
+      title: "Silo Tanımları",
       roles: {
         modifiers: ["admin", "supervizor", "operator"],
         viewers: ["manager"],
@@ -45,11 +48,12 @@ const routes = [
 
   {
     path: "/formulas",
-    name: "Formüller",
+    name: "formulas",
     component: () =>
       import(/* webpackChunkName: "formulas" */ "../views/Formulas.vue"),
     meta: {
       key: "4",
+      title: "Formüller",
       roles: {
         modifiers: ["admin", "supervizor"],
         viewers: ["operator", "manager"],
@@ -58,11 +62,29 @@ const routes = [
   },
   {
     path: "/production",
-    name: "Üretim",
+    name: "production",
     component: () =>
-      import(/* webpackChunkName: "production" */ "../views/Production.vue"),
+      import(/* webpackChunkName: "production" */ "../views/production/Index"),
     meta: {
       key: "5",
+      title: "Üretim",
+      roles: {
+        modifiers: ["admin", "supervizor", "operator"],
+        viewers: ["manager"],
+      },
+    },
+  },
+  {
+    path: "/production/process/:id",
+    name: "production-process",
+    component: () =>
+      import(
+        /* webpackChunkName: "production-process" */ "../views/production/Process"
+      ),
+    props: true,
+    meta: {
+      key: "5-6",
+      title: "Üretim Süreç Takip",
       roles: {
         modifiers: ["admin", "supervizor", "operator"],
         viewers: ["manager"],

@@ -65,7 +65,7 @@ module.exports = {
       },
     });
     await queryInterface.addConstraint("ProductionGroups", {
-      fields: ["batchNumber", "productionId"],
+      fields: ["batchNumber", "productionId", "groupId"],
       type: "unique",
       name: "UK_ProductionGroups",
     });

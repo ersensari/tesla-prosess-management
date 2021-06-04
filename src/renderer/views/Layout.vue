@@ -148,18 +148,21 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const { user } = useState(["user"], "auth");
-    const pageKey = inject("pageKey", 1);
+    const pageKey = inject("pageKey", "1");
 
     const selectedKeys = ref([]);
     const openKeys = ref([""]);
     const collapsed = ref(false);
 
     const getRoute = (key) => {
-      const route = router.getRoutes().find((r) => r.meta.key === key);
+      const route = router.getRoutes().find((r) => key === r.meta.key);
       return route;
     };
 
-    const pageName = computed(() => getRoute(pageKey.value).name);
+    const pageName = computed(() => {
+      const r = getRoute(pageKey.value).meta.title;
+      return r;
+    });
 
     watch(selectedKeys, function (val) {
       const route = getRoute(val[0]);
@@ -169,7 +172,7 @@ export default defineComponent({
     });
 
     watch(pageKey, (val) => {
-      selectedKeys.value.push(val);
+      selectedKeys.value.push(val.split("-")[0]);
     });
 
     const { logout } = useActions(["logout"], "auth");

@@ -4,19 +4,19 @@ const { DataTypes } = require("sequelize");
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("ProductionDetails", {
+    return queryInterface.createTable("ProductionFormulas", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      productionGroupId: {
+      productionId: {
         type: DataTypes.INTEGER,
         onDelete: "CASCADE",
         references: {
           model: {
-            tableName: "ProductionGroups",
+            tableName: "Productions",
             schema: "dbo",
           },
           key: "id",
@@ -67,21 +67,27 @@ module.exports = {
         allowNull: false,
         default: 0,
       },
-      consumptionAmount: {
+      shutoff1: {
         type: DataTypes.DECIMAL(10, 3),
         allowNull: false,
         default: 0,
       },
-      diffAmount: {
+      shutoff2: {
         type: DataTypes.DECIMAL(10, 3),
         allowNull: false,
         default: 0,
       },
-      diffPercent: {
-        type: DataTypes.DECIMAL(10, 2),
+      shutoff3: {
+        type: DataTypes.DECIMAL(10, 3),
         allowNull: false,
         default: 0,
       },
+      tolerance: {
+        type: DataTypes.DECIMAL(10, 3),
+        allowNull: false,
+        default: 0,
+      },
+
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
@@ -94,6 +100,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("ProductionDetails");
+    return queryInterface.dropTable("ProductionFormulas");
   },
 };

@@ -1,16 +1,33 @@
 {
   "development": {
+    "username": "tesla_pu",
+    "password": "Tesla2021.",
+    "database": "tesla",
+    "dialect": "mssql",
+    "host": "192.168.1.20",
+    "dialectOptions": {
+      "options": {
+        "instanceName": "WINCC"
+      }
+    }
+  },
+  "local": {
     "username": "sa",
     "password": "Ees27121982*",
     "database": "tesla",
-    "host": "127.0.0.1",
-    "dialect": "mssql"
+    "dialect": "mssql",
+    "host": "localhost"
   },
   "production": {
-    "username": "sa",
-    "password": "Ees27121982*",
+    "username": "tesla_pu",
+    "password": "Tesla2021.",
     "database": "tesla",
-    "host": "127.0.0.1",
-    "dialect": "mssql"
+    "dialect": "mssql",
+    "host": "192.168.1.20",
+    "dialectOptions": {
+      "options": {
+        "instanceName": "WINCC"
+      }
+    }
   }
 }

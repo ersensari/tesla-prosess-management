@@ -20,9 +20,11 @@ body {
 
   .layout-header {
     background: #fff;
-    padding: 0 20px 0 0;
+    padding: 2px 20px 0 0;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 48px;
   }
 
   .layout-content {
@@ -33,9 +35,9 @@ body {
   }
 
   .trigger {
-    font-size: 18px;
-    line-height: 64px;
-    padding: 0 24px;
+    font-size: 24px;
+    line-height: 48px;
+    padding: 2px 24px;
     cursor: pointer;
     transition: color 0.3s;
   }
@@ -128,4 +130,9 @@ body {
       font-size: 20px;
     }
   }
+}
+
+.highlight {
+  background-color: rgb(255, 192, 105);
+  padding: 0px;
 }

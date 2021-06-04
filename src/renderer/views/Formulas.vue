@@ -128,7 +128,10 @@
         </div>
       </template>
       <template #formulaDate="{ record }">
-        {{ moment(record.formulaNo).format("DD.MM.YYYY") }}
+        {{ formatDate(record.formulaDate) }}
+      </template>
+      <template #totalAmount="{ record }">
+        {{ getFormulaTotalAmount(record) }}
       </template>
     </a-table>
   </div>
@@ -141,13 +144,13 @@
             <a-row>
               <a-col :span="24">
                 <a-form-item
-                  label="Adı"
+                  label="Formül Adı"
                   v-bind="validateInfos['form.name']"
                   :label-col="{
-                    span: 1,
+                    span: 3,
                   }"
                   :wrapper-col="{
-                    span: 23,
+                    span: 21,
                   }"
                 >
                   <a-input v-model:value="modelRef.form.name" />
@@ -424,11 +427,10 @@
             <a-card
               title="Parametreler"
               :bordered="true"
-              size="small"
-              style="margin-left: 1rem; width: 100%"
+              style="margin-left: 1rem; width: 100%; margin-bottom: 3px"
             >
               <a-form-item
-                label="Örnek alma döngü sayısı"
+                label="Örnek kontrolü"
                 v-bind="validateInfos['form.sampleRate']"
                 :label-col="{
                   span: 16,
@@ -437,11 +439,16 @@
                   span: 8,
                 }"
               >
-                <a-input-number
+                <a-select
                   v-model:value="modelRef.form.sampleRate"
-                  :min="0"
-                  :max="100"
-                />
+                  style="width: 120px"
+                >
+                  <a-select-option :value="0">Alma</a-select-option>
+                  <a-select-option :value="1">Her Partide</a-select-option>
+                  <a-select-option :value="2">Son Partide</a-select-option>
+                  <a-select-option :value="3">5 Partide Bir</a-select-option>
+                  <a-select-option :value="4">10 Partide Bir</a-select-option>
+                </a-select>
               </a-form-item>
               <a-form-item
                 label="Mikser Alt Kapak Açma Süresi"
@@ -563,10 +570,8 @@
             <a-card
               title="Toplamlar"
               :bordered="true"
-              size="small"
-              style="margin-left: 1rem; width: 100%"
+              style="margin-left: 1rem; width: 100%; margin-bottom: 3px"
             >
-              {{ calcGroupTotal }}
               <table style="width: 100%">
                 <tbody>
                   <tr
@@ -575,9 +580,7 @@
                     style="border-bottom: 1px solid #ccc"
                   >
                     <th>{{ group.name }}</th>
-                    <td>
-                      {{ getGroupTotal(group.id) }}
-                    </td>
+                    <td>{{ getGroupTotal(group.id) }}</td>
                   </tr>
                   <tr style="border-top: 2px solid #333">
                     <th>Genel Toplam</th>
@@ -883,6 +886,9 @@ export default defineComponent({
         dataIndex: "total",
         key: "total",
         width: 100,
+        slots: {
+          customRender: "totalAmount",
+        },
       },
     ];
 
@@ -1092,6 +1098,10 @@ export default defineComponent({
     });
 
     const formatDate = (date) => moment(date).format("DD.MM.YYYY");
+    const getFormulaTotalAmount = (formula) =>
+      _(formula.Details)
+        .filter((x) => x.dosingOrder >= 0)
+        .sumBy((x) => x.amount);
     return {
       formulas,
       dosingGroupItems,
@@ -1124,14 +1134,9 @@ export default defineComponent({
       getGroupTotal,
       setDetailRowStyle,
       checkSiloRawMaterial,
+      getFormulaTotalAmount,
+      calcGroupTotal,
     };
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.highlight {
-  background-color: rgb(255, 192, 105);
-  padding: 0px;
-}
-</style>

@@ -272,10 +272,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.highlight {
-  background-color: rgb(255, 192, 105);
-  padding: 0px;
-}
-</style>

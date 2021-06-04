@@ -1,42 +1,45 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class FormulaDetail extends Model {
+  class ProductionFormula extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.FormulaDetail.DosingGroup = models.FormulaDetail.belongsTo(
+      models.ProductionFormula.DosingGroup = models.ProductionFormula.belongsTo(
         models.DosingGroup,
         {
           foreignKey: "groupId",
         }
       );
 
-      models.FormulaDetail.Silo = models.FormulaDetail.belongsTo(models.Silo, {
-        foreignKey: "siloId",
-      });
+      models.ProductionFormula.Silo = models.ProductionFormula.belongsTo(
+        models.Silo,
+        {
+          foreignKey: "siloId",
+        }
+      );
 
-      models.FormulaDetail.RawMaterial = models.FormulaDetail.belongsTo(
+      models.ProductionFormula.RawMaterial = models.ProductionFormula.belongsTo(
         models.RawMaterial,
         {
           foreignKey: "rawMaterialId",
         }
       );
 
-      models.FormulaDetail.Formula = models.FormulaDetail.belongsTo(
-        models.Formula,
+      models.ProductionFormula.Production = models.ProductionFormula.belongsTo(
+        models.Production,
         {
-          foreignKey: "formulaId",
+          foreignKey: "productionId",
         }
       );
     }
   }
-  FormulaDetail.init(
+  ProductionFormula.init(
     {
-      formulaId: DataTypes.INTEGER,
+      productionId: DataTypes.INTEGER,
       groupId: DataTypes.INTEGER,
       siloId: DataTypes.INTEGER,
       rawMaterialId: DataTypes.INTEGER,
@@ -49,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "FormulaDetail",
+      modelName: "ProductionFormula",
     }
   );
-  return FormulaDetail;
+  return ProductionFormula;
 };

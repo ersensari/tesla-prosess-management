@@ -10,13 +10,14 @@ import auth from "./modules/auth";
 import rawMaterial from "./modules/raw-material";
 import dosingGroup from "./modules/dosing-group";
 import formula from "./modules/formula";
-
+import production from "./modules/production";
 export default createStore({
   modules: {
     auth,
     rawMaterial,
     dosingGroup,
     formula,
+    production,
   },
   plugins: [persist],
 });

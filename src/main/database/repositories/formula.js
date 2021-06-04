@@ -1,6 +1,5 @@
 const db = require("../index");
 const Model = db.Formula;
-const FormulaDetail = db.FormulaDetail;
 
 module.exports = {
   queries: {
@@ -16,6 +15,7 @@ module.exports = {
                 model: db.Silo,
                 include: ["RawMaterial"],
               },
+              "DosingGroup",
               "RawMaterial",
             ],
           },
@@ -33,6 +33,7 @@ module.exports = {
                 model: db.Silo,
                 include: ["RawMaterial"],
               },
+              "DosingGroup",
               "RawMaterial",
             ],
           },

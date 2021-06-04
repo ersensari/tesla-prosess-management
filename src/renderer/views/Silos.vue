@@ -387,8 +387,4 @@ export default defineComponent({
   color: #fff;
   padding: 5px 0px;
 }
-.highlight {
-  background-color: rgb(255, 192, 105);
-  padding: 0px;
-}
 </style>

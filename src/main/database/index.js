@@ -1,8 +1,11 @@
 "use strict";
 const { Sequelize, DATE } = require("sequelize");
+require("tedious");
+
 const models = require("./models/all");
 
 const env = process.env.NODE_ENV || "development";
+
 const config = require("../config/database.json")[env];
 
 const db = {};
@@ -20,8 +23,7 @@ const sequelize = new Sequelize(
   config.username,
   config.password,
   {
-    host: config.host,
-    dialect: "mssql",
+    ...config,
     dialectModule: require("tedious"),
   }
 );
