@@ -6,15 +6,65 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="favicon.ico" />
     <title>Tesla Üretim Yönetimi</title>
+    <style>
+      body {
+        -webkit-app-region: drag;
+        user-select: none;
+        user-zoom: none;
+        margin: 0;
+        overflow: hidden;
+        height: 64px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 0.7em;
+        color: #fff;
+        background-color: #333;
+      }
+      .panel {
+        display: flex;
+        margin: 0px;
+        padding: 0px;
+        flex-flow: row;
+        height: 100%;
+        align-items: center;
+      }
+      .panel-body {
+        margin-left: 3px;
+      }
+      .panel-content {
+        display: flex;
+      }
+
+      label {
+        width: 50px;
+        text-align: right;
+        margin-right: 3px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
-  <body draggable="true" style="-webkit-app-region: drag; user-select: none; user-zoom: none; margin: 0; overflow: hidden;">
-    <img
-      id="btnBackToMain"
-      src="./tesla-icon.png"
-      style="width: 64px; height: 64px; margin: 0px;"
-      alt="Tesla Üretim Yönetimi"
-      title="Ana Ekrana Dönmek İçin Çift Tıklayın!"
-    />
+  <body draggable="true">
+    <div class="panel">
+      <img
+        id="btnBackToMain"
+        src="./tesla-icon.png"
+        style="width: 64px; height: 64px; margin: 0px;"
+        alt="Tesla Üretim Yönetimi"
+        title="Ana Ekrana Dönmek İçin Çift Tıklayın!"
+      />
+      <div class="panel-body">
+        <div class="panel-content">
+          <label>Formül:</label>
+          <strong id="txtFormulaName"></strong>
+        </div>
+        <div class="panel-content">
+          <label>Parti:</label>
+          <strong id="txtBatchCount"></strong>
+        </div>
+        <div class="panel-content hidden" id="info">Üretim başlatabilmek için uygulamadan seçim yapınız!</div>
+      </div>
+    </div>
   </body>
   <script>
     const { ipcRenderer } = require('electron');
@@ -22,5 +72,15 @@
       ipcRenderer.send('openMainWindow');
     }
     addEventListener('dblclick', fnBackToMain);
+
+    ipcRenderer.on('miniWindowSelectedOrder', async (event, order) => {
+      document.getElementById('info').classList.add('hidden');
+      if (order) {
+        document.getElementById('txtFormulaName').innerHTML = order.name;
+        document.getElementById('txtBatchCount').innerHTML = order.batchCount;
+      } else {
+        document.getElementById('info').classList.remove('hidden');
+      }
+    });
   </script>
 </html>

@@ -55,11 +55,19 @@
           </template>
           <a-menu-item key="6">
             <ProfileOutlined />
-            <span> Temel Üretim Raporu</span></a-menu-item
+            <span> Üretim Raporu</span></a-menu-item
           >
           <a-menu-item key="7">
             <ProfileOutlined />
+            <span> Temel Üretim Raporu</span></a-menu-item
+          >
+          <a-menu-item key="8">
+            <ProfileOutlined />
             <span> Detaylı Üretim Raporu</span>
+          </a-menu-item>
+          <a-menu-item key="9">
+            <ProfileOutlined />
+            <span> Tüketilen Hammadde Raporu</span>
           </a-menu-item>
         </a-sub-menu>
       </a-menu>
@@ -93,7 +101,11 @@
         </a-menu>
       </a-layout-header>
       <a-layout-content class="layout-content">
-        <router-view />
+        <router-view v-slot="{ Component }">
+          <keep-alive include="FlatProduction">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -117,8 +129,8 @@ import {
   ClusterOutlined,
 } from "@ant-design/icons-vue";
 import { computed, defineComponent, inject, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useState, useActions } from "@/store/hooks";
+import { useRouter, useRoute } from "vue-router";
+import { useState, useActions, useMutations } from "@/store/hooks";
 export default defineComponent({
   components: {
     "a-layout": Layout,
@@ -147,6 +159,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const { user } = useState(["user"], "auth");
     const pageKey = inject("pageKey", "1");
 
@@ -185,6 +198,7 @@ export default defineComponent({
       onLogoutClick: logout,
       pageName,
       pageKey,
+      route,
     };
   },
 });

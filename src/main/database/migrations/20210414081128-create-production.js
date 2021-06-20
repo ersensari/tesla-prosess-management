@@ -101,6 +101,19 @@ module.exports = {
         allowNull: true,
         default: 0,
       },
+      selected: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        default: false,
+      },
+      startedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      finishedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

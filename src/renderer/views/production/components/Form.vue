@@ -19,7 +19,7 @@
               <td>{{ model.formulaNo }}</td>
               <th style="width: 100px; text-align: right">Tarih:</th>
               <td style="width: 200px; text-align: left">
-                {{ formatDate(model.formulaDate) }}
+                {{ $filters.formatDate(model.formulaDate) }}
               </td>
               <th style="width: 100px; text-align: right">Kısa Adı:</th>
               <td>{{ model.shortName }}</td>
@@ -165,7 +165,7 @@
                 placeholder="Tarih Seçiniz"
                 style="width: 100%"
                 :locale="locale"
-                :format="formatDate"
+                :format="$filters.formatDate"
                 valueFormat="YYYY-MM-DD"
               />
             </a-form-item>
@@ -342,7 +342,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
 import _ from "lodash";
 import { computed, defineComponent, onMounted, ref, toRaw } from "vue";
@@ -452,8 +451,6 @@ export default defineComponent({
         },
       ],
     };
-
-    const formatDate = (date) => moment(date).format("DD.MM.YYYY");
 
     const dosingGroup = useActions(["findAll"], "dosingGroup");
     const { items: dosingGroupItems } = useState(["items"], "dosingGroup");
@@ -569,14 +566,12 @@ export default defineComponent({
     });
 
     return {
-      moment,
       locale,
       model,
       formRules,
       prodForm,
       formulaDetails,
       loading,
-      formatDate,
       dosingGroupItems,
       calcGroupTotal,
       getGroupTotal,

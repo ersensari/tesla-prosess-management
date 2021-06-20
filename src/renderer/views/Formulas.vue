@@ -128,7 +128,7 @@
         </div>
       </template>
       <template #formulaDate="{ record }">
-        {{ formatDate(record.formulaDate) }}
+        {{ $filters.formatDate(record.formulaDate) }}
       </template>
       <template #totalAmount="{ record }">
         {{ getFormulaTotalAmount(record) }}
@@ -205,7 +205,7 @@
                     placeholder="Tarih Seçiniz"
                     style="width: 100%"
                     :locale="locale"
-                    :format="formatDate"
+                    :format="$filters.formatDate"
                     valueFormat="YYYY-MM-DD"
                   />
                 </a-form-item>
@@ -305,7 +305,7 @@
                     </thead>
                     <tbody>
                       <tr
-                        v-for="detail in modelRef.form.Details.filter(
+                        v-for="detail in ld(modelRef.form.Details).filter(
                           (x) => x.groupId === group.id
                         )"
                         :key="detail.id"
@@ -618,7 +618,6 @@
   />
 </template>
 <script>
-import moment, { Moment } from "moment";
 import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
 import _ from "lodash";
 import {
@@ -1042,9 +1041,12 @@ export default defineComponent({
         .map(function (g, key) {
           return {
             groupId: parseInt(key),
-            sum: _(g).reduce(function (m, x) {
-              return m + x.amount;
-            }, 0),
+            sum: _.round(
+              _(g).reduce(function (m, x) {
+                return m + x.amount;
+              }, 0),
+              3
+            ),
           };
         })
         .value();
@@ -1054,14 +1056,17 @@ export default defineComponent({
 
     const getGroupTotal = (groupid) => {
       if (groupid === -1) {
-        return _(calcGroupTotal.value).sumBy((x) => x.sum);
+        return _.round(
+          _(calcGroupTotal.value).sumBy((x) => x.sum),
+          3
+        );
       }
 
       const g = calcGroupTotal.value.find((x) => x.groupId === groupid);
       if (!g) {
         return 0;
       }
-      return g.sum;
+      return _.round(g.sum, 3);
     };
 
     const checkSiloRawMaterial = (detail) =>
@@ -1097,12 +1102,12 @@ export default defineComponent({
       setEditMode(false);
     });
 
-    const formatDate = (date) => moment(date).format("DD.MM.YYYY");
     const getFormulaTotalAmount = (formula) =>
       _(formula.Details)
         .filter((x) => x.dosingOrder >= 0)
         .sumBy((x) => x.amount);
     return {
+      ld: _,
       formulas,
       dosingGroupItems,
       columns,
@@ -1128,8 +1133,6 @@ export default defineComponent({
       modelRef,
       notification,
       locale,
-      moment,
-      formatDate,
       rawMaterialsSelectModalVisible,
       getGroupTotal,
       setDetailRowStyle,

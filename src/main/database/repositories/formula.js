@@ -5,7 +5,7 @@ module.exports = {
   queries: {
     findAll: async () => {
       return await Model.findAll({
-        order: ["formulaNo"],
+        order: ["formulaNo", ["Details", "Silo", "row", "asc"]],
         include: [
           {
             model: db.FormulaDetail,

@@ -15,84 +15,88 @@ const {
 } = require("electron-devtools-installer");
 
 //const electronLocalshortcut = require("electron-localshortcut");
-const path = require("path");
-const electron_data = require("electron-data");
+//const electron_data = require("electron-data");
 const modules = require("./modules");
-const { readFile, stat } = require("fs");
+//const { readFile, stat } = require("fs");
+//const miniWindow = require("./modules/miniWindow");
 
-const appPath =
-  process.env.NODE_ENV === "production"
-    ? `${process.resourcesPath}/app`
-    : __dirname;
+// const appPath =
+//   process.env.NODE_ENV === "production"
+//     ? `${process.resourcesPath}/app`
+//     : __dirname;
 
-electron_data.config({
-  filename: "user.json",
-  path: appPath,
-  autosave: true,
-  lastUpdate: true,
-});
+// electron_data.config({
+//   filename: "user.json",
+//   path: appPath,
+//   autosave: true,
+//   lastUpdate: true,
+// });
 
-stat(appPath + "/user.json", (err, stats) => {
-  if (!err) {
-    readFile(appPath + "/user.json", { encoding: "utf-8" }, (_, data) => {
-      electron_data.set(
-        "topWindowLocation",
-        JSON.parse(data).topWindowLocation
-      );
-    });
-  }
-});
+// stat(appPath + "/user.json", (err, stats) => {
+//   if (!err) {
+//     readFile(appPath + "/user.json", { encoding: "utf-8" }, (_, data) => {
+//       electron_data.set(
+//         "topWindowLocation",
+//         JSON.parse(data).topWindowLocation
+//       );
+//     });
+//   }
+// });
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-let topWindow = null;
+//let topWindow = null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
-async function createTopWindow() {
-  let pos = null;
-  if (await electron_data.has("topWindowLocation")) {
-    pos = await electron_data.get("topWindowLocation");
-  }
+// async function createTopWindow() {
+//   let pos = null;
+//   if (await electron_data.has("topWindowLocation")) {
+//     pos = await electron_data.get("topWindowLocation");
+//   }
 
-  topWindow = new BrowserWindow({
-    ...pos,
-    width: 64,
-    height: 64,
-    alwaysOnTop: true,
-    frame: false,
-    thickFrame: false,
-    show: false,
-    resizable: false,
-    closable: true,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-  });
-  topWindow.on("close", function () {
-    topWindow = null;
-  });
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    await topWindow.loadURL(
-      path.join(process.env.WEBPACK_DEV_SERVER_URL, "topWindow.html")
-    );
-  } else {
-    await topWindow.loadURL(path.join("file://", __dirname, "topWindow.html"));
-  }
+// topWindow = new BrowserWindow({
+//   ...pos,
+//   width: 264,
+//   height: 64,
+//   alwaysOnTop: true,
+//   frame: false,
+//   thickFrame: false,
+//   show: false,
+//   resizable: false,
+//   closable: true,
+//   webPreferences: {
+//     contextIsolation: false,
+//     nodeIntegration: true,
+//     enableRemoteModule: true,
+//   },
+// });
+// topWindow.on("close", function (event) {
+//   topWindow = null;
+//   miniWindow(topWindow);
+// });
+// if (process.env.WEBPACK_DEV_SERVER_URL) {
+//   await topWindow.loadURL(
+//     path.join(process.env.WEBPACK_DEV_SERVER_URL, "topWindow.html")
+//   );
+// } else {
+//   await topWindow.loadURL(path.join("file://", __dirname, "topWindow.html"));
+// }
 
-  topWindow.showInactive();
+// topWindow.showInactive();
 
-  topWindow.on("moved", (args) => {
-    electron_data.set("topWindowLocation", {
-      x: args.sender.getPosition()[0],
-      y: args.sender.getPosition()[1],
-    });
-  });
-}
+// topWindow.on("show", () => {
+//   miniWindow(topWindow);
+// });
+// topWindow.on("moved", (args) => {
+//   electron_data.set("topWindowLocation", {
+//     x: args.sender.getPosition()[0],
+//     y: args.sender.getPosition()[1],
+//   });
+// });
+//}
 
 async function createWindow() {
   // Create the browser window.
@@ -108,26 +112,20 @@ async function createWindow() {
     },
   });
 
-  win.on("focus", (event) => {
-    if (topWindow !== null) {
-      topWindow.close();
-    }
+  // win.on("focus", (event) => {
+  //   if (topWindow !== null) {
+  //     topWindow.close();
+  //   }
+  // });
 
-    // electronLocalshortcut.register(
-    //   win,
-    //   ["CommandOrControl+R", "CommandOrControl+Shift+R", "F5"],
-    //   () => {}
-    // );
-  });
-
-  win.on("blur", (event) => {
-    createTopWindow();
-    //electronLocalshortcut.unregisterAll(win);
-  });
+  // win.on("blur", (event) => {
+  //   createTopWindow();
+  // });
 
   ipcMain.on("openMainWindow", () => {
     win.show();
     win.focus();
+    win.maximize();
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

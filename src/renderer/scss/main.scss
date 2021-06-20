@@ -9,6 +9,9 @@ body {
   height: 100vh;
   margin: 0;
 }
+.ant-layout {
+  background-color: #fff !important;
+}
 #app {
   height: 100%;
   width: 100%;
@@ -24,13 +27,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 48px;
+    height: 49px;
+    border-bottom: 1px solid rgb(238, 238, 238);
   }
 
   .layout-content {
     margin: 24px 16px;
-    padding: 2px;
-    background: #fff;
+    // padding: 2px;
+    // background: #fff;
     height: 100%;
   }
 

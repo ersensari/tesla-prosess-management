@@ -1,29 +1,39 @@
 {
-  "development": {
+  "is-development": {
     "username": "tesla_pu",
     "password": "Tesla2021.",
     "database": "tesla",
     "dialect": "mssql",
-    "host": "192.168.1.20",
+    "host": "192.168.1.100",
     "dialectOptions": {
       "options": {
-        "instanceName": "WINCC"
+        "instanceName": "WINCC",
+        "useUTC": false,
+        "dateStrings": true
       }
-    }
+    },
+    "timezone": "+03:00"
   },
-  "local": {
+  "development": {
     "username": "sa",
     "password": "Ees27121982*",
-    "database": "tesla",
+    "database": "tesla_tesla",
     "dialect": "mssql",
-    "host": "localhost"
+    "host": "localhost",
+    "dialectOptions": {
+      "options": {
+        "useUTC": false,
+        "dateStrings": true
+      }
+    },
+    "timezone": "+03:00"
   },
   "production": {
     "username": "tesla_pu",
     "password": "Tesla2021.",
     "database": "tesla",
     "dialect": "mssql",
-    "host": "192.168.1.20",
+    "host": "192.168.1.100",
     "dialectOptions": {
       "options": {
         "instanceName": "WINCC"

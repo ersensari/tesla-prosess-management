@@ -109,7 +109,7 @@
         </div>
       </template>
       <template #formulaDate="{ record }">
-        {{ formatDate(record.formulaDate) }}
+        {{ $filters.formatDate(record.formulaDate) }}
       </template>
       <template #totalAmount="{ record }">
         {{ getFormulaTotalAmount(record) }}
@@ -119,7 +119,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import _ from "lodash";
 import {
   Table,
@@ -264,7 +263,6 @@ export default defineComponent({
       searchText.value = "";
     };
 
-    const formatDate = (date) => moment(date).format("DD.MM.YYYY");
     const getFormulaTotalAmount = (formula) =>
       _(formula.Details)
         .filter((x) => x.dosingOrder >= 0)
@@ -295,7 +293,6 @@ export default defineComponent({
       searchText,
       searchInput,
       searchedColumn,
-      formatDate,
       getFormulaTotalAmount,
       onSelectClick,
       cancelFormulaSelection,

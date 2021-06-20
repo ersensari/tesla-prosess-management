@@ -56,6 +56,23 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       productionAmount: DataTypes.DECIMAL(10, 3),
+      selected: DataTypes.BOOLEAN,
+      startedAt: {
+        type: DataTypes.DATE,
+        get() {
+          const date = this.getDataValue("startedAt");
+          if (date) return moment(date)._d;
+          else return null;
+        },
+      },
+      finishedAt: {
+        type: DataTypes.DATE,
+        get() {
+          const date = this.getDataValue("finishedAt");
+          if (date) return moment(date)._d;
+          else return null;
+        },
+      },
     },
     {
       sequelize,

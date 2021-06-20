@@ -75,7 +75,7 @@ const routes = [
     },
   },
   {
-    path: "/production/process/:id",
+    path: "/production/process/:id/:batchNumber?",
     name: "production-process",
     component: () =>
       import(
@@ -85,6 +85,70 @@ const routes = [
     meta: {
       key: "5-6",
       title: "Üretim Süreç Takip",
+      roles: {
+        modifiers: ["admin", "supervizor", "operator"],
+        viewers: ["manager"],
+      },
+    },
+  },
+  {
+    path: "/reports/flat-production",
+    name: "reports-flat-production",
+    component: () =>
+      import(
+        /* webpackChunkName: "reports-flat-production" */ "../views/reports/FlatProduction"
+      ),
+    meta: {
+      key: "6",
+      title: "Üretim Raporu",
+      roles: {
+        modifiers: ["admin", "supervizor", "operator"],
+        viewers: ["manager"],
+      },
+    },
+  },
+  {
+    path: "/reports/basic-production",
+    name: "reports-basic-production",
+    component: () =>
+      import(
+        /* webpackChunkName: "reports-basic-production" */ "../views/reports/BasicProduction"
+      ),
+    meta: {
+      key: "7",
+      title: "Temel Üretim Raporu",
+      roles: {
+        modifiers: ["admin", "supervizor", "operator"],
+        viewers: ["manager"],
+      },
+    },
+  },
+  {
+    path: "/reports/detailed-production",
+    name: "reports-detailed-production",
+    component: () =>
+      import(
+        /* webpackChunkName: "reports-detailed-production" */ "../views/reports/DetailedProduction"
+      ),
+    meta: {
+      key: "8",
+      title: "Detaylı Üretim Raporu",
+      roles: {
+        modifiers: ["admin", "supervizor", "operator"],
+        viewers: ["manager"],
+      },
+    },
+  },
+  {
+    path: "/reports/consumed-raw-material",
+    name: "reports-consumed-raw-material",
+    component: () =>
+      import(
+        /* webpackChunkName: "consumed-raw-material" */ "../views/reports/ConsumedRawMaterial"
+      ),
+    meta: {
+      key: "9",
+      title: "Tüketilen Hammadde Raporu",
       roles: {
         modifiers: ["admin", "supervizor", "operator"],
         viewers: ["manager"],
