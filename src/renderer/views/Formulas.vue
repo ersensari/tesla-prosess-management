@@ -356,7 +356,12 @@
                         </td>
                         <td v-if="!group.manual">
                           {{ detail.Silo.row }}
-                          <a-tooltip v-if="checkSiloRawMaterial(detail)">
+                          <a-tooltip
+                            v-if="
+                              checkSiloRawMaterial(detail) &&
+                              detail.Silo.RawMaterial
+                            "
+                          >
                             <template #title>
                               Silo Malzemesi : {{ detail.Silo.RawMaterial.name
                               }}<br />
@@ -367,8 +372,12 @@
                             />
                           </a-tooltip>
                         </td>
-                        <td>{{ detail.RawMaterial.rawNo }}</td>
-                        <td>{{ detail.RawMaterial.name }}</td>
+                        <td>
+                          {{ detail.RawMaterial.rawNo }}
+                        </td>
+                        <td>
+                          {{ detail.RawMaterial.name }}
+                        </td>
                         <td>
                           <a-input-number
                             size="small"
@@ -464,8 +473,10 @@
                   v-model:value="modelRef.form.mixerBottomCoverOpeningTime"
                   :min="0"
                   :max="5000"
-                  :formatter="(value) => `${value} sn`"
-                  :parser="(value) => value.replace('sn', '')"
+                  :step="1"
+                  :precision="0"
+                  :formatter="(value) => `${value}sn`"
+                  :parser="(value) => value.replace(/s|n/g, '')"
                 />
               </a-form-item>
               <a-form-item
@@ -482,7 +493,9 @@
                   v-model:value="modelRef.form.mixerLowSpeedRunSet"
                   :min="0"
                   :max="100"
-                  :formatter="(value) => `${value} %`"
+                  :step="1"
+                  :precision="0"
+                  :formatter="(value) => `${value}%`"
                   :parser="(value) => value.replace('%', '')"
                 /> </a-form-item
               ><a-form-item
@@ -499,7 +512,9 @@
                   v-model:value="modelRef.form.mixerHighSpeedRunSet"
                   :min="0"
                   :max="100"
-                  :formatter="(value) => `${value} %`"
+                  :step="1"
+                  :precision="0"
+                  :formatter="(value) => `${value}%`"
                   :parser="(value) => value.replace('%', '')"
                 />
               </a-form-item>
@@ -517,8 +532,10 @@
                   v-model:value="modelRef.form.mixerMixTime"
                   :min="0"
                   :max="5000"
-                  :formatter="(value) => `${value} sn`"
-                  :parser="(value) => value.replace('sn', '')"
+                  :step="1"
+                  :precision="0"
+                  :formatter="(value) => `${value}sn`"
+                  :parser="(value) => value.replace(/s|n/g, '')"
                 />
               </a-form-item>
               <a-form-item
@@ -535,8 +552,10 @@
                   v-model:value="modelRef.form.chopperEnginesRuningTime"
                   :min="0"
                   :max="5000"
-                  :formatter="(value) => `${value} sn`"
-                  :parser="(value) => value.replace('sn', '')"
+                  :step="1"
+                  :precision="0"
+                  :formatter="(value) => `${value}sn`"
+                  :parser="(value) => value.replace(/s|n/g, '')"
                 />
               </a-form-item>
               <a-form-item

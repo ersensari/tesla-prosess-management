@@ -220,8 +220,10 @@
                 v-model:value="model.mixerBottomCoverOpeningTime"
                 :min="0"
                 :max="5000"
-                :formatter="(value) => `${value} sn`"
-                :parser="(value) => value.replace('sn', '')"
+                :step="1"
+                :precision="0"
+                :formatter="(value) => `${value}sn`"
+                :parser="(value) => value.replace(/s|n/g, '')"
               />
             </a-form-item>
             <a-form-item
@@ -238,7 +240,9 @@
                 v-model:value="model.mixerLowSpeedRunSet"
                 :min="0"
                 :max="100"
-                :formatter="(value) => `${value} %`"
+                :step="1"
+                :precision="0"
+                :formatter="(value) => `${value}%`"
                 :parser="(value) => value.replace('%', '')"
               /> </a-form-item
             ><a-form-item
@@ -255,7 +259,9 @@
                 v-model:value="model.mixerHighSpeedRunSet"
                 :min="0"
                 :max="100"
-                :formatter="(value) => `${value} %`"
+                :step="1"
+                :precision="0"
+                :formatter="(value) => `${value}%`"
                 :parser="(value) => value.replace('%', '')"
               />
             </a-form-item>
@@ -273,8 +279,10 @@
                 v-model:value="model.mixerMixTime"
                 :min="0"
                 :max="5000"
-                :formatter="(value) => `${value} sn`"
-                :parser="(value) => value.replace('sn', '')"
+                :step="1"
+                :precision="0"
+                :formatter="(value) => `${value}sn`"
+                :parser="(value) => value.replace(/s|n/g, '')"
               />
             </a-form-item>
             <a-form-item
@@ -291,8 +299,10 @@
                 v-model:value="model.chopperEnginesRuningTime"
                 :min="0"
                 :max="5000"
-                :formatter="(value) => `${value} sn`"
-                :parser="(value) => value.replace('sn', '')"
+                :step="1"
+                :precision="0"
+                :formatter="(value) => `${value}sn`"
+                :parser="(value) => value.replace(/s|n/g, '')"
               />
             </a-form-item>
             <a-form-item

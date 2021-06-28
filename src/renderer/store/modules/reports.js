@@ -57,6 +57,36 @@ const actions = {
       );
     });
   },
+  groupedProductionList: ({ commit }, criteria) => {
+    return new Promise((resolve, reject) => {
+      commit("setLoadingStatus", true);
+
+      ipcRenderer.once(
+        MODULE_NAME + ".groupedProductionListCompleted",
+        (_, result) => {
+          resolve(result);
+          commit("setLoadingStatus", false);
+        }
+      );
+      ipcRenderer.once(
+        MODULE_NAME + ".groupedProductionListError",
+        (_, error) => {
+          commit("setError", error);
+          commit("setLoadingStatus", false);
+          commit("setNotification", {
+            type: "error",
+            message: "Hata oluştu !",
+            description: error.message,
+          });
+          reject(error);
+        }
+      );
+      ipcRenderer.send(
+        MODULE_NAME + ".groupedProductionList",
+        JSON.parse(JSON.stringify(criteria))
+      );
+    });
+  },
 
   findByPk: ({ commit }, id) => {
     new Promise((resolve, reject) => {

@@ -134,7 +134,10 @@
               <template #icon>
                 <SyncOutlined
                   spin
-                  v-if="productionHasStarted(record)"
+                  v-if="
+                    productionHasStarted(record) &&
+                    !productionHasFinished(record)
+                  "
                   style="color: green"
                 />
                 <LinkOutlined v-else-if="record.selected" />

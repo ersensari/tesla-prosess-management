@@ -8,7 +8,7 @@ import Layout from "@/views/Layout";
 import Login from "@/views/user/Login";
 import { useState } from "@/store/hooks";
 import { provide, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   components: {
@@ -16,8 +16,9 @@ export default {
     Login,
   },
   setup() {
-    const { token } = useState(["token"], "auth");
+    const { token, user } = useState(["token", "user"], "auth");
     const route = useRoute();
+    const router = useRouter();
     const pageKey = ref("1");
     provide("pageKey", pageKey);
     watch(
@@ -26,6 +27,22 @@ export default {
         pageKey.value = meta.key;
       }
     );
+
+    router.beforeEach((to, from, next) => {
+      const roles = to.meta.roles.modifiers
+        ? to.meta.roles.viewers.concat(to.meta.roles.modifiers)
+        : to.meta.roles.viewers;
+
+      if (
+        token &&
+        user.value.role !== "admin" &&
+        !roles.includes("all") &&
+        !roles.includes(user.value.role)
+      ) {
+        next({ name: "access-denied" });
+      } else next();
+    });
+
     return {
       token,
     };

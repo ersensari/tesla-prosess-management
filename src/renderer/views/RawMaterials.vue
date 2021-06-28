@@ -155,6 +155,13 @@
         <a-form-item label="SAP Kodu" v-bind="validateInfos['form.sapCode']">
           <a-input v-model:value="modelRef.form.sapCode" />
         </a-form-item>
+        <a-form-item label="Yoğunluk" v-bind="validateInfos['form.density']">
+          <a-input-number
+            v-model:value="modelRef.form.density"
+            :min="0"
+            :max="5000"
+          />
+        </a-form-item>
         <a-form-item label="Açıklama">
           <a-input v-model:value="modelRef.form.explanation" />
         </a-form-item>
@@ -185,6 +192,7 @@ import {
   Tooltip,
   Form,
   notification as showNotify,
+  InputNumber,
 } from "ant-design-vue";
 import {
   SearchOutlined,
@@ -200,6 +208,7 @@ export default defineComponent({
     "a-table": Table,
     "a-button": Button,
     "a-input": Input,
+    "a-input-number": InputNumber,
     "a-popconfirm": Popconfirm,
     "a-modal": Modal,
     "a-tooltip": Tooltip,
@@ -312,6 +321,12 @@ export default defineComponent({
         ...filterMethods("sapCode"),
       },
       {
+        title: "Yoğunluk",
+        dataIndex: "density",
+        key: "density",
+        width: 150,
+      },
+      {
         title: "Açıklama",
         dataIndex: "explanation",
         key: "explanation",
@@ -348,7 +363,7 @@ export default defineComponent({
           if (modelRef.form.id) {
             update(toRaw(modelRef.form));
           } else {
-            save(toRaw(modelRef.form.details));
+            save(toRaw(modelRef.form));
           }
         })
         .catch((err) => {

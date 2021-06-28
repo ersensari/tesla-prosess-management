@@ -25,6 +25,25 @@ cross APPLY (
     GROUP by pg.batchNumber
 ) as detail;
 
+GO
+
+CREATE view GROUPED_PRODUCTION_LIST as 
+select  
+ROW_NUMBER() over(order by name) id, 
+*,consumptionTotal-targetTotal  diff, (consumptionTotal-targetTotal)/targetTotal *100 diffPercent from 
+(SELECT
+min(startedAt) startedAt,max(finishedAt)finishedAt ,
+formulaNo ,name, SUM(targetTotal) targetTotal, SUM(consumptionTotal) consumptionTotal,count(1) batchCount,
+     STUFF(
+         (SELECT DISTINCT ',' + convert(nvarchar,productionId) 
+          FROM FLAT_PRODUCTION_LIST
+          WHERE formulaNo=a.formulaNo and name=a.name 
+          FOR XML PATH (''))
+          , 1, 1, '')  AS productionIds 
+FROM FLAT_PRODUCTION_LIST AS a
+GROUP BY formulaNo ,name) b
+
+GO
 -- dbo.AKTIF_URETIM source
 
 CREATE view [dbo].[AKTIF_URETIM] as 
@@ -50,7 +69,7 @@ select
 from Productions p 
 WHERE p.selected = 1 
 ORDER by p.id desc;
-
+GO
 -- dbo.SILO_HAMMADDE source
 
 CREATE view SILO_HAMMADDE AS
@@ -63,7 +82,7 @@ JOIN Silos s  on s.id  = dgs.siloId
 join RawMaterials rm  on s.rawMaterialId  = rm.id 
 WHERE dg.manual =0
 order by dg.row, s.row;
-
+GO
 -- dbo.URETIM_FORMUL source
 
 CREATE view URETIM_FORMUL as 

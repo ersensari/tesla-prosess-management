@@ -1,5 +1,5 @@
 {
-  "is-development": {
+  "development": {
     "username": "tesla_pu",
     "password": "Tesla2021.",
     "database": "tesla",
@@ -14,7 +14,7 @@
     },
     "timezone": "+03:00"
   },
-  "development": {
+  "docker-development": {
     "username": "sa",
     "password": "Ees27121982*",
     "database": "tesla_tesla",
@@ -29,15 +29,18 @@
     "timezone": "+03:00"
   },
   "production": {
-    "username": "tesla_pu",
+    "username": "sa",
     "password": "Tesla2021.",
     "database": "tesla",
     "dialect": "mssql",
-    "host": "192.168.1.100",
+    "host": "192.168.1.230",
     "dialectOptions": {
       "options": {
-        "instanceName": "WINCC"
+        "instanceName": "WINCC",
+        "useUTC": false,
+        "dateStrings": true
       }
-    }
+    },
+    "timezone": "+03:00"
   }
 }

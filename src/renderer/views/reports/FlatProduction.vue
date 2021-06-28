@@ -247,10 +247,6 @@ export default defineComponent({
     };
 
     const exportExcel = () => {
-      // excel().then((excel) =>
-      //   excel.export_table_to_excel("table-data", "flat-production-list")
-      // );
-
       const tHeader = columns.map((x) => x.title);
       const filterVal = columns.map((x) => x.dataIndex);
 

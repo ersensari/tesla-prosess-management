@@ -2,14 +2,7 @@ import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 const persist = new VuexPersistence({
   key: "tesla-storage",
-  modules: [
-    "auth",
-    "rawMaterial",
-    "dosingGroup",
-    "formula",
-    "production",
-    "reports",
-  ],
+  modules: ["auth", "production", "reports"],
   asyncStorage: false,
 }).plugin;
 

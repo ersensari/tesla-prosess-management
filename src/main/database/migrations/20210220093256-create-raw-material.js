@@ -23,6 +23,10 @@ module.exports = {
       explanation: {
         type: Sequelize.STRING,
       },
+      density: {
+        type: Sequelize.DECIMAL(10, 3),
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

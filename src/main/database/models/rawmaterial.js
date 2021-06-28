@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       sapCode: DataTypes.STRING,
       rawNo: DataTypes.STRING,
       explanation: DataTypes.STRING,
+      density: DataTypes.DECIMAL(10, 3),
     },
     {
       sequelize,

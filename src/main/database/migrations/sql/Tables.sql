@@ -99,6 +99,7 @@ CREATE TABLE RawMaterials (
 	sapCode nvarchar(255) COLLATE Turkish_CI_AS NULL,
 	rawNo nvarchar(255) COLLATE Turkish_CI_AS NULL,
 	explanation nvarchar(255) COLLATE Turkish_CI_AS NULL,
+  density decimal(10,3) NULLL default(0),
 	createdAt datetime NOT NULL,
 	updatedAt datetime NOT NULL,
 	CONSTRAINT PK__RawMater__3213E83F822D0CFB PRIMARY KEY (id)

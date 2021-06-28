@@ -1,8 +1,19 @@
+import { useState } from "@/store/hooks";
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home";
 
-//all routes need authentication
 const routes = [
+  {
+    path: "/access-denied",
+    name: "access-denied",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "../views/user/AccessDenied.vue"),
+    meta: {
+      roles: {
+        viewers: ["all"],
+      },
+    },
+  },
   {
     path: "/",
     component: Home,
@@ -102,8 +113,7 @@ const routes = [
       key: "6",
       title: "Üretim Raporu",
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ["admin", "supervizor", "operator", "manager"],
       },
     },
   },
@@ -118,8 +128,7 @@ const routes = [
       key: "7",
       title: "Temel Üretim Raporu",
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ["admin", "supervizor", "operator", "manager"],
       },
     },
   },
@@ -134,8 +143,7 @@ const routes = [
       key: "8",
       title: "Detaylı Üretim Raporu",
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ["admin", "supervizor", "operator", "manager"],
       },
     },
   },
@@ -150,8 +158,7 @@ const routes = [
       key: "9",
       title: "Tüketilen Hammadde Raporu",
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ["admin", "supervizor", "operator", "manager"],
       },
     },
   },

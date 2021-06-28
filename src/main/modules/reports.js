@@ -3,6 +3,18 @@ const Repo = require("../database/repositories/reports");
 const MODULE_NAME = "reports";
 
 module.exports = async () => {
+  ipcMain.on(MODULE_NAME + ".findByPk", async (event, id) => {
+    try {
+      const context = await Repo.queries.findByPk(id);
+      event.reply(MODULE_NAME + ".findByPkCompleted", context.toJSON());
+    } catch (error) {
+      event.reply(MODULE_NAME + ".findByPkError", {
+        code: 505,
+        message: error.message,
+      });
+    }
+  });
+
   ipcMain.on(MODULE_NAME + ".flatProductionList", async (event, criteria) => {
     try {
       const context = await Repo.queries.flatProductionList(criteria);
@@ -15,15 +27,18 @@ module.exports = async () => {
     }
   });
 
-  ipcMain.on(MODULE_NAME + ".findByPk", async (event, id) => {
-    try {
-      const context = await Repo.queries.findByPk(id);
-      event.reply(MODULE_NAME + ".findByPkCompleted", context.toJSON());
-    } catch (error) {
-      event.reply(MODULE_NAME + ".findByPkError", {
-        code: 505,
-        message: error.message,
-      });
+  ipcMain.on(
+    MODULE_NAME + ".groupedProductionList",
+    async (event, criteria) => {
+      try {
+        const context = await Repo.queries.groupedProductionList(criteria);
+        event.reply(MODULE_NAME + ".groupedProductionListCompleted", context);
+      } catch (error) {
+        event.reply(MODULE_NAME + ".groupedProductionListError", {
+          code: 505,
+          message: error.message,
+        });
+      }
     }
-  });
+  );
 };

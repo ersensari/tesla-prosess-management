@@ -102,7 +102,9 @@
       </a-layout-header>
       <a-layout-content class="layout-content">
         <router-view v-slot="{ Component }">
-          <keep-alive include="FlatProduction">
+          <keep-alive
+            include="FlatProduction,DetailedProduction,BasicProduction,ConsumedRawMaterial"
+          >
             <component :is="Component" />
           </keep-alive>
         </router-view>
@@ -185,7 +187,7 @@ export default defineComponent({
     });
 
     watch(pageKey, (val) => {
-      selectedKeys.value.push(val.split("-")[0]);
+      selectedKeys.value.push(val ? val.split("-")[0] : 1);
     });
 
     const { logout } = useActions(["logout"], "auth");
