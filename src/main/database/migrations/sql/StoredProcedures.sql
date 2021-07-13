@@ -151,7 +151,8 @@ BEGIN
 
 END;
 
-CREATE PROCEDURE dbo.DOZAJ_BITTI
+
+CREATE PROCEDURE [dbo].[DOZAJ_BITTI]
     @productionId INT,
     @batchNo INT,
     @groupNo INT    
@@ -179,11 +180,19 @@ BEGIN
 	
 		update p set p.finishedAt =GETDATE(), p.updatedAt = GETDATE() 
 		from Productions p  where p.id = @productionId and p.batchCount = @batchNo
-		and (select count(*) from ProductionGroups pg where pg.productionId=p.id and pg.batchNumber=@batchNo and pg.finished=1)=5 --Yağ dozaj bittiğinde burası 6 olacak
+		and (select count(*) from ProductionGroups pg where pg.productionId=p.id and pg.batchNumber=@batchNo and pg.finished=1)=
+		(select count(distinct(groupId)) from ProductionFormulas where productionId=@productionId)
 		
 	END
      
 END;
+
+
+
+GO
+
+
+
 
 CREATE PROCEDURE dbo.URETIM_RESET
     @productionId INT    
@@ -215,3 +224,52 @@ SELECT
     ,ERROR_PROCEDURE() AS ErrorProcedure  
     ,ERROR_LINE() AS ErrorLine  
     ,ERROR_MESSAGE() AS ErrorMessage;
+
+GO
+
+create  procedure [dbo].[sp_GROUPED_PRODUCTION_LIST] @bdate datetime, @edate datetime as 
+ select  
+ROW_NUMBER() over(order by name) id, 
+*,consumptionTotal-targetTotal  diff, (consumptionTotal-targetTotal)/targetTotal *100 diffPercent from 
+(SELECT
+min(startedAt) startedAt,max(finishedAt)finishedAt ,
+formulaNo ,name, SUM(targetTotal) targetTotal, SUM(consumptionTotal) consumptionTotal,count(1) batchCount,
+     STUFF(
+         (SELECT DISTINCT ',' + convert(nvarchar,productionId) 
+          FROM FLAT_PRODUCTION_LIST b
+          WHERE b.formulaNo=a.formulaNo and b.name=a.name 
+		  and  b.finishedAt >= @bdate and b.finishedAt <= @edate
+          FOR XML PATH (''))
+          , 1, 1, '')  AS productionIds 
+FROM FLAT_PRODUCTION_LIST AS a
+where a.finishedAt >= @bdate and a.finishedAt <= @edate
+GROUP BY formulaNo ,name) b
+ ORDER BY startedAt desc
+ GO
+
+-- =============================================
+-- Author: Eyüp Ersen SARI
+-- Create date: 21/07/2021
+-- Description: İstenen veritabanının yedeğini alır
+-- =============================================
+
+CREATE PROCEDURE DBbackup
+@name VARCHAR(MAX) = '' -- DB NAME TO CREATE BACKUP
+AS
+BEGIN
+
+DECLARE @path VARCHAR(256) -- path of backup files
+DECLARE @fileName VARCHAR(256) -- filename for backup
+DECLARE @fileDate VARCHAR(20) -- used for file name
+
+SET @path = 'C:\Temp\'
+
+-- specify filename format
+SELECT @fileDate = CONVERT(VARCHAR(20),GETDATE(),112)
+
+BEGIN
+SET @fileName = @path + @name + '_' + @fileDate + '.bak'
+BACKUP DATABASE @name TO DISK = @fileName
+END
+END
+GO

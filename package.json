@@ -12,7 +12,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
-    "electron:build-all": "sudo vue-cli-service electron:build -mw",
+    "electron:build-all": "sudo vue-cli-service electron:build -w",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -42,17 +42,17 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-pwa": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-pwa": "^4.5.13",
+    "@vue/cli-plugin-router": "^4.5.13",
+    "@vue/cli-plugin-vuex": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
+    "@vue/compiler-sfc": "^3.1.4",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-import": "^1.13.3",
-    "electron": "^11.0.0",
+    "electron": "^13.1.6",
     "electron-devtools-installer": "^3.2.0",
     "electron-packager": "^15.2.0",
     "eslint": "^6.7.2",
@@ -65,6 +65,6 @@
     "script-loader": "^0.7.2",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.0.0"
+    "webpack": "4.43.0"
   }
 }

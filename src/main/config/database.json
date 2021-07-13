@@ -1,5 +1,5 @@
 {
-  "development": {
+  "work-development": {
     "username": "tesla_pu",
     "password": "Tesla2021.",
     "database": "tesla",
@@ -20,6 +20,20 @@
     "database": "tesla_tesla",
     "dialect": "mssql",
     "host": "localhost",
+    "dialectOptions": {
+      "options": {
+        "useUTC": false,
+        "dateStrings": true
+      }
+    },
+    "timezone": "+03:00"
+  },
+  "development": {
+    "username": "sa",
+    "password": "123456.",
+    "database": "tesla",
+    "dialect": "mssql",
+    "host": "10.211.55.3",
     "dialectOptions": {
       "options": {
         "useUTC": false,

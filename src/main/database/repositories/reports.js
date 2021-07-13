@@ -10,7 +10,7 @@ module.exports = {
           : criteria.endDate;
 
       const result = await db.sequelize.query(
-        "select fpl.* from FLAT_PRODUCTION_LIST fpl WHERE fpl.startedAt >= :beginDate and fpl.finishedAt <= :endDate ORDER BY fpl.startedAt desc",
+        "select fpl.* from FLAT_PRODUCTION_LIST fpl WHERE fpl.finishedAt >= :beginDate and fpl.finishedAt <= :endDate ORDER BY fpl.startedAt desc",
         {
           replacements: {
             beginDate: new Date(
@@ -31,7 +31,7 @@ module.exports = {
           : criteria.endDate;
 
       const list = await db.sequelize.query(
-        "select fpl.* from GROUPED_PRODUCTION_LIST fpl WHERE fpl.startedAt >= :beginDate and fpl.finishedAt <= :endDate ORDER BY fpl.startedAt desc",
+        "exec sp_GROUPED_PRODUCTION_LIST  :beginDate,  :endDate",
         {
           replacements: {
             beginDate: new Date(
