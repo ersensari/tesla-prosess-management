@@ -47,7 +47,7 @@
             </div>
             <div>
               <label>Başlama Zamanı :</label>
-              {{ $filters.formatDateTime(model.activeOrder.startedAt) }}
+              {{ $filters.formatDateTime2(model.activeOrder.startedAt) }}
             </div>
             <div>
               <label>Geçen Süre :</label>
@@ -79,9 +79,9 @@
           <tr>
             <th>Dozaj Grup</th>
             <th style="width: 60px; text-align: center">Başladı</th>
-            <th style="width: 140px">Başlama Zamanı</th>
+            <th style="width: 160px">Başlama Zamanı</th>
             <th style="width: 60px; text-align: center">Bitti</th>
-            <th style="width: 140px">Bitiş Zamanı</th>
+            <th style="width: 160px">Bitiş Zamanı</th>
             <th style="width: 100px">Hedef Miktar</th>
             <th style="width: 100px">Gerçek Miktar</th>
             <th style="width: 100px">Fark</th>
@@ -95,7 +95,7 @@
               <CheckCircleTwoTone v-if="group.started" twoToneColor="#52c41a" />
               <MinusCircleTwoTone v-else twoToneColor="#eb2f96" />
             </td>
-            <td>{{ $filters.formatDateTime(group.startedAt) }}</td>
+            <td>{{ $filters.formatDateTime2(group.startedAt) }}</td>
             <td style="text-align: center">
               <CheckCircleTwoTone
                 v-if="group.finished"
@@ -103,7 +103,7 @@
               />
               <MinusCircleTwoTone v-else twoToneColor="#eb2f96" />
             </td>
-            <td>{{ $filters.formatDateTime(group.finishedAt) }}</td>
+            <td>{{ $filters.formatDateTime2(group.finishedAt) }}</td>
             <td>{{ getTargetTotal(group.groupId) }}</td>
             <td>
               {{ getConsumptionTotal(group) }}

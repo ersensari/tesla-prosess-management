@@ -64,10 +64,10 @@
         {{ $filters.formatDate(record.productionDate) }}
       </template>
       <template #startedAt="{ record }">
-        {{ $filters.formatDateTime(record.startedAt) }}
+        {{ $filters.formatDateTime2(record.startedAt) }}
       </template>
       <template #finishedAt="{ record }">
-        {{ $filters.formatDateTime(record.finishedAt) }}
+        {{ $filters.formatDateTime2(record.finishedAt) }}
       </template>
       <template #targetTotal="{ record }">
         {{ round(record.targetTotal, 3) }}
@@ -270,7 +270,7 @@ export default defineComponent({
               return filters.formatDate(v[j]);
             case "startedAt":
             case "finishedAt":
-              return filters.formatDateTime(v[j]);
+              return filters.formatDateTime2(v[j]);
             default:
               return v[j];
           }

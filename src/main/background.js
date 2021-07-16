@@ -14,6 +14,8 @@ const {
   VUEJS3_DEVTOOLS,
 } = require("electron-devtools-installer");
 
+const gotTheLock = app.requestSingleInstanceLock();
+
 //const electronLocalshortcut = require("electron-localshortcut");
 //const electron_data = require("electron-data");
 const modules = require("./modules");
@@ -97,10 +99,10 @@ protocol.registerSchemesAsPrivileged([
 //   });
 // });
 //}
-
+let win = null;
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1680,
     height: 900,
     minWidth: 1680,
@@ -194,18 +196,28 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on("ready", async () => {
-  installExtension(VUEJS3_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log("An error occurred: ", err));
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+  });
 
-  createWindow();
-  setMainMenu();
-  modules.forEach((m) => m());
-});
+  app.on("ready", async () => {
+    if (isDevelopment) {
+      installExtension(VUEJS3_DEVTOOLS)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log("An error occurred: ", err));
+    }
+
+    createWindow();
+    setMainMenu();
+    modules.forEach((m) => m());
+  });
+}
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

@@ -584,6 +584,19 @@
                   v-model:checked="modelRef.form.dustExtractionPermit"
                 ></a-check>
               </a-form-item>
+              <a-form-item
+                label="Ham Dz2 Kantar Önce"
+                :label-col="{
+                  span: 16,
+                }"
+                :wrapper-col="{
+                  span: 8,
+                }"
+              >
+                <a-check
+                  v-model:checked="modelRef.form.chopperEngine2Permit"
+                ></a-check>
+              </a-form-item>
             </a-card>
             <!--Toplamlar-->
             <a-card

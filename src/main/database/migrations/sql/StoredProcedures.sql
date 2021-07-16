@@ -247,13 +247,26 @@ GROUP BY formulaNo ,name) b
  ORDER BY startedAt desc
  GO
 
+USE [tesla]
+GO
+
+/****** Object:  StoredProcedure [dbo].[DBbackup]    Script Date: 7/14/2021 2:57:47 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 -- =============================================
 -- Author: Eyüp Ersen SARI
 -- Create date: 21/07/2021
 -- Description: İstenen veritabanının yedeğini alır
 -- =============================================
+/*
+EXEC [DBbackup] 'DBbackup'
+*/
+ALTER PROCEDURE [dbo].[DBbackup]
 
-CREATE PROCEDURE DBbackup
 @name VARCHAR(MAX) = '' -- DB NAME TO CREATE BACKUP
 AS
 BEGIN
@@ -267,9 +280,45 @@ SET @path = 'C:\Temp\'
 -- specify filename format
 SELECT @fileDate = CONVERT(VARCHAR(20),GETDATE(),112)
 
-BEGIN
-SET @fileName = @path + @name + '_' + @fileDate + '.bak'
-BACKUP DATABASE @name TO DISK = @fileName
-END
+	BEGIN
+	SET @fileName = @path + @name + '_' + @fileDate + '.bak'
+	BACKUP DATABASE @name TO DISK = @fileName
+	END
+	BEGIN
+		declare @zipCommand  varchar(512) =  'powershell Compress-Archive -force ' + @fileName + ' ' + replace(@fileName,'.bak','.zip')
+		exec master.dbo.xp_cmdshell @zipCommand
+	END
+	begin
+		declare @delCommand varchar(512) = 'powershell Remove-Item -path ' + @fileName
+		exec master.dbo.xp_cmdshell @delCommand
+	end
+	begin
+		declare @delBefore5Days varchar(512) = 'powershell Get-ChildItem –Path ' + @path +  ' -Recurse ^| Where-Object {($_.LastWriteTime -lt (Get-Date).AddDays(-5))} ^| Remove-Item' 
+		--print @delBefore5Days
+		exec master.dbo.xp_cmdshell @delBefore5Days
+	end
+
 END
 GO
+
+
+---- Show Advanced Options
+--EXEC sp_configure 'show advanced options', 1
+--GO
+--RECONFIGURE
+--GO
+---- Enable xp_cmdshell
+--EXEC sp_configure 'xp_cmdshell', 1
+--GO
+--RECONFIGURE
+--GO
+---- Hide Advanced Options
+--EXEC sp_configure 'show advanced options', 0
+--GO
+--RECONFIGURE
+--GO
+
+
+--exec DBbackup 'tesla'
+
+-- scheduled task için -> osql -S . -E  -Q "exec tesla.dbo.DBbackup 'tesla';" -o "c:\temp\Log.txt"

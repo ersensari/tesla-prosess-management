@@ -52,6 +52,7 @@ select
 	p.id[URT_ID],
 	p.batchCount [PRT_SAYI],
 	CONVERT(INT,p.chopperEngine1Permit) [CHOPPER_IZIN],
+  CONVERT(INT,p.chopperEngine2Permit) [HAM_KNT2_ONCE],
 	p.chopperEnginesRuningTime [CHOPPER_SURE],
 	CONVERT(INT,p.dustExtractionPermit) [TOZ_TOPLAMA_IZIN],
 	p.mixerBottomCoverOpeningTime [MIX_KPK_PT_ZMN_SET],

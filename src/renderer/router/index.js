@@ -1,6 +1,4 @@
-import { useState } from "@/store/hooks";
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../views/Home";
 
 const routes = [
   {
@@ -16,7 +14,7 @@ const routes = [
   },
   {
     path: "/",
-    component: Home,
+    component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue"),
     name: "home",
     meta: {
       key: "1",
@@ -26,6 +24,7 @@ const routes = [
       },
     },
   },
+
   {
     path: "/raw-materials",
     name: "raw-materials",

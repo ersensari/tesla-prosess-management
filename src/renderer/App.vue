@@ -7,7 +7,7 @@
 import Layout from "@/views/Layout";
 import Login from "@/views/user/Login";
 import { useState } from "@/store/hooks";
-import { provide, ref, watch } from "vue";
+import { provide, ref, watch, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
@@ -41,6 +41,10 @@ export default {
       ) {
         next({ name: "access-denied" });
       } else next();
+    });
+
+    onUnmounted(() => {
+      localStorage.removeItem("tesla-storage");
     });
 
     return {

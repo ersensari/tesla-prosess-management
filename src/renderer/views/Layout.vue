@@ -130,7 +130,7 @@ import {
   FilterOutlined,
   ClusterOutlined,
 } from "@ant-design/icons-vue";
-import { computed, defineComponent, inject, ref, watch } from "vue";
+import { computed, defineComponent, inject, onMounted, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useState, useActions, useMutations } from "@/store/hooks";
 export default defineComponent({
@@ -187,7 +187,8 @@ export default defineComponent({
     });
 
     watch(pageKey, (val) => {
-      selectedKeys.value.push(val ? val.split("-")[0] : 1);
+      //selectedKeys.value = [];
+      selectedKeys.value.push(val ? val.split("-")[0] : "1");
     });
 
     const { logout } = useActions(["logout"], "auth");

@@ -213,10 +213,10 @@
         {{ $filters.formatDate(record.productionDate) }}
       </template>
       <template #startedAt="{ record }">
-        {{ $filters.formatDateTime(record.startedAt) }}
+        {{ $filters.formatDateTime2(record.startedAt) }}
       </template>
       <template #finishedAt="{ record }">
-        {{ $filters.formatDateTime(record.finishedAt) }}
+        {{ $filters.formatDateTime2(record.finishedAt) }}
       </template>
       <template #targetTotal="{ record }">
         {{ getTargetTotal(record) }}
@@ -360,7 +360,7 @@ export default defineComponent({
         title: "Başlama Zamanı",
         dataIndex: "startedAt",
         key: "startedAt",
-        width: 120,
+        width: 140,
         slots: {
           customRender: "startedAt",
         },
@@ -369,7 +369,7 @@ export default defineComponent({
         title: "Bitiş Zamanı",
         dataIndex: "finishedAt",
         key: "finishedAt",
-        width: 120,
+        width: 140,
         slots: {
           customRender: "finishedAt",
         },

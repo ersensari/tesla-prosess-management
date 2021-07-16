@@ -77,6 +77,8 @@ import { Spin, Alert, Layout, Form, Input, Button } from "ant-design-vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { useState, useActions, useMutations } from "@/store/hooks";
 import { reactive, defineComponent, toRaw, toRef } from "vue";
+import { useRouter } from "vue-router";
+
 export default defineComponent({
   components: {
     "a-spin": Spin,
@@ -100,6 +102,8 @@ export default defineComponent({
 
     const { login } = useActions(["login"], "auth");
 
+    const router = useRouter();
+
     const formState = reactive({
       username: "",
       password: "",
@@ -107,7 +111,13 @@ export default defineComponent({
 
     const handleLogin = (values) => {
       setError(undefined);
-      login(toRaw(values));
+      login(toRaw(values))
+        .then((token) => {
+          router.push({ name: "home" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     return {

@@ -29,16 +29,20 @@ const mutations = {
 
 const actions = {
   login: ({ commit }, payload) => {
-    ipcRenderer.once("loginCompleted", (_, context) => {
-      commit("setToken", context);
-      loading.value = false;
+    return new Promise((resolve, reject) => {
+      ipcRenderer.once("loginCompleted", (_, context) => {
+        commit("setToken", context);
+        loading.value = false;
+        resolve(context);
+      });
+      ipcRenderer.once("loginError", (_, error) => {
+        commit("setError", error);
+        loading.value = false;
+        reject(error);
+      });
+      ipcRenderer.send("login", JSON.stringify(payload));
+      loading.value = true;
     });
-    ipcRenderer.once("loginError", (_, error) => {
-      commit("setError", error);
-      loading.value = false;
-    });
-    ipcRenderer.send("login", JSON.stringify(payload));
-    loading.value = true;
   },
 
   logout: ({ commit }) => {
