@@ -72,7 +72,7 @@
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
+    <a-layout class="ant-layout">
       <a-layout-header class="layout-header">
         <menu-unfold-outlined
           v-if="collapsed"

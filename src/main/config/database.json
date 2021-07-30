@@ -1,7 +1,7 @@
 {
-  "work-development": {
-    "username": "tesla_pu",
-    "password": "Tesla2021.",
+  "is-development": {
+    "username": "sa",
+    "password": "1",
     "database": "tesla",
     "dialect": "mssql",
     "host": "192.168.1.100",
@@ -28,7 +28,7 @@
     },
     "timezone": "+03:00"
   },
-  "development": {
+  "vm-development": {
     "username": "sa",
     "password": "123456.",
     "database": "tesla",
@@ -48,6 +48,21 @@
     "database": "tesla",
     "dialect": "mssql",
     "host": "192.168.1.230",
+    "dialectOptions": {
+      "options": {
+        "instanceName": "WINCC",
+        "useUTC": false,
+        "dateStrings": true
+      }
+    },
+    "timezone": "+03:00"
+  },
+  "cc-production": {
+    "username": "sa",
+    "password": "1",
+    "database": "tesla",
+    "dialect": "mssql",
+    "host": "192.168.1.100",
     "dialectOptions": {
       "options": {
         "instanceName": "WINCC",

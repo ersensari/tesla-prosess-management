@@ -291,7 +291,7 @@ export default defineComponent({
 
       return groupedDetails.toJSON();
     };
-
+    const filters = inject("filters");
     const exportExcel = () => {
       const tHeader = columns.map((x) => x.title);
       const filterVal = columns.map((x) => x.dataIndex);
@@ -322,6 +322,21 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
+          merges: ["A1:G1", "A2:B2", "C2:G2"],
+          multiHeader: [
+            ["DETAYLI ÜRETİM RAPORU", "", "", "", "", "", ""],
+            [
+              "Başlama - Bitiş Zamanı :",
+              "",
+              filters.formatDateTime(criteria.value.beginDate) +
+                " - " +
+                filters.formatDateTime(criteria.value.endDate),
+              "",
+              "",
+              "",
+              "",
+            ],
+          ],
           header: tHeader, //Header Required
           data: data, //Specific data Required
           filename: "detailed-production-list", //Optional

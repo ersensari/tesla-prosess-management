@@ -9,11 +9,12 @@ function generateArray(table) {
   for (var R = 0; R < rows.length; ++R) {
     var outRow = [];
     var row = rows[R];
-    var columns = row.querySelectorAll('td');
+    var columns = row.querySelectorAll('td,th');
+
     for (var C = 0; C < columns.length; ++C) {
       var cell = columns[C];
-      var colspan = cell.getAttribute('colspan');
-      var rowspan = cell.getAttribute('rowspan');
+      var colspan = parseInt(cell.getAttribute('colspan'));
+      var rowspan = parseInt(cell.getAttribute('rowspan'));
       var cellValue = cell.innerText;
       if (cellValue !== '' && cellValue == +cellValue) cellValue = +cellValue;
 
@@ -46,6 +47,7 @@ function generateArray(table) {
       //Handle Colspan
       if (colspan) for (var k = 0; k < colspan - 1; ++k) outRow.push(null);
     }
+
     out.push(outRow);
   }
   return [out, ranges];
@@ -120,7 +122,7 @@ export function export_table_to_excel(id, filename) {
 
   /* original data */
   var data = oo[0];
-  var ws_name = 'SheetJS';
+  var ws_name = filename;
 
   var wb = new Workbook(),
     ws = sheet_from_array_of_arrays(data);
@@ -138,6 +140,31 @@ export function export_table_to_excel(id, filename) {
     bookSST: false,
     type: 'binary'
   });
+
+  saveAs(
+    new Blob([s2ab(wbout)], {
+      type: 'application/octet-stream'
+    }),
+    filename + '.xlsx'
+  );
+}
+
+export function export_table_to_excel2(id, filename) {
+  const theTable = document.getElementById(id);
+  const sheet = XLSX.utils.table_to_sheet(theTable);
+
+  const workbook = {
+    SheetNames: [filename],
+    Sheets: {}
+  };
+  workbook.Sheets[filename] = sheet;
+
+  var wopts = {
+    bookType: 'xlsx',
+    bookSST: false,
+    type: 'binary'
+  };
+  var wbout = XLSX.write(workbook, wopts);
 
   saveAs(
     new Blob([s2ab(wbout)], {
@@ -212,7 +239,7 @@ export function export_json_to_excel({ multiHeader = [], header, data, filename,
   });
   saveAs(
     new Blob([s2ab(wbout)], {
-      type: 'application/octet-stream'
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'
     }),
     `${filename}.${bookType}`
   );

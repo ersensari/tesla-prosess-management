@@ -60,7 +60,7 @@
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
 import _, { round } from "lodash";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, inject, reactive, ref } from "vue";
 const excel = () => import("@/components/Export2Excel");
 import {
   Table,
@@ -202,6 +202,7 @@ export default defineComponent({
 
       state.list = groupedDetails.toJSON();
     };
+    const filters = inject("filters");
 
     const exportExcel = () => {
       const tHeader = columns.map((x) => x.title);
@@ -210,6 +211,20 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
+          merges: ["A1:F1", "A2:B2", "C2:F2"],
+          multiHeader: [
+            ["TÜKETİLEN HAMMADDE RAPORU", "", "", "", "", ""],
+            [
+              "Başlama - Bitiş Zamanı :",
+              "",
+              filters.formatDateTime(criteria.value.beginDate) +
+                " - " +
+                filters.formatDateTime(criteria.value.endDate),
+              "",
+              "",
+              "",
+            ],
+          ],
           header: tHeader, //Header Required
           data, //Specific data Required
           filename: "consumed-raw-material-report", //Optional

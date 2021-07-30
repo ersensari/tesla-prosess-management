@@ -63,7 +63,7 @@
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
 import _, { round } from "lodash";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, inject, reactive, ref } from "vue";
 const excel = () => import("@/components/Export2Excel");
 import {
   Table,
@@ -190,6 +190,8 @@ export default defineComponent({
       state.list = result.list;
     };
 
+    const filters = inject("filters");
+
     const exportExcel = () => {
       const tHeader = columns.map((x) => x.title);
       const filterVal = columns.map((x) => x.dataIndex);
@@ -221,6 +223,21 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
+          merges: ["A1:G1", "A2:B2", "C2:G2"],
+          multiHeader: [
+            ["TEMEL ÜRETİM RAPORU", "", "", "", "", "", ""],
+            [
+              "Başlama - Bitiş Zamanı :",
+              "",
+              filters.formatDateTime(criteria.value.beginDate) +
+                " - " +
+                filters.formatDateTime(criteria.value.endDate),
+              "",
+              "",
+              "",
+              "",
+            ],
+          ],
           header: tHeader, //Header Required
           data: data.concat([footer]), //Specific data Required
           filename: "basic-production-list", //Optional

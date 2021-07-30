@@ -14,6 +14,8 @@ const {
   VUEJS3_DEVTOOLS,
 } = require("electron-devtools-installer");
 
+process.setMaxListeners(0);
+
 const gotTheLock = app.requestSingleInstanceLock();
 
 //const electronLocalshortcut = require("electron-localshortcut");

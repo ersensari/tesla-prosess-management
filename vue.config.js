@@ -8,6 +8,9 @@ module.exports = {
       },
     },
   },
+  // pages: {
+  //   index: "src/renderer/main.js",
+  // },
   productionSourceMap: false,
   pluginOptions: {
     electronBuilder: {
@@ -25,12 +28,13 @@ module.exports = {
           icon: "public/tesla-icon.ico",
         },
         nsis: {
-          artifactName: "${productName}.${version}",
+          shortcutName: "${productName}",
+          artifactName: "${productName}.${version}.exe",
           installerIcon: "public/tesla-icon.ico",
           uninstallerIcon: "public/tesla-icon.ico",
           uninstallDisplayName: "${productName}.${version}",
-          oneClick: false,
-          allowToChangeInstallationDirectory: true,
+          oneClick: true,
+          allowToChangeInstallationDirectory: false,
         },
         dmg: {
           title: "${productName}.${version}",

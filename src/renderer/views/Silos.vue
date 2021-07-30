@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%; overflow: hidden scroll">
-    <a-row :gutter="[8, 8]" style="max-height: 100%">
+    <a-row :gutter="[8, 8]" style="max-height: calc(100vh - 90px)">
       <a-col
         :xs="{ span: 24 }"
         :md="{ span: 24 }"

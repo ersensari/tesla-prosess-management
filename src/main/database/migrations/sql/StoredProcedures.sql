@@ -1,10 +1,49 @@
-CREATE PROCEDURE [dbo].[DOZAJ_BASLA]
+
+CREATE PROCEDURE dbo.URETIM_RESET
+    @productionId INT    
+AS
+BEGIN
+declare @amount decimal(10,3)
+select 
+	@amount = sum(pd.consumptionAmount)	
+from productiongroups pg 
+join ProductionDetails pd  on pg.id = pd.productionGroupId 
+where pg.productionId =@productionId 
+
+
+update p set p.finishedAt = GETDATE(), p.explanation = p.explanation + ' - Üretim manual bitirildi', p.productionAmount = @amount, p.updatedAt =getdate()	
+FROM productions p where id=@productionId and p.finishedAt  is NULL 
+
+update ProductionGroups set finished =1, finishedAt = GETDATE(), updatedAt =GETDATE() 
+where isnull(finished,0)=0
+
+END;
+
+CREATE  PROCEDURE [dbo].[DOZAJ_BASLA]
     @productionId INT,
     @batchNo INT,
     @groupNo INT    
 AS
 BEGIN
 	
+
+	--Önceden bitirilmemiş üretim emri varsa tümünü manual olarak bitirildi kaydı oluştur.
+	declare @pid bigint
+	DECLARE db_cursor CURSOR FOR 
+	select id from Productions p where id!=@productionId
+	and p.finishedAt is null and p.startedAt is not null
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @pid  
+
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN  
+	exec dbo.URETIM_RESET @pid
+	FETCH NEXT FROM db_cursor INTO @pid  
+	END
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor 
+	----------------------------------
+
 	IF @batchNo>0 and @groupNo>0
 	BEGIN 	
     IF EXISTS(select 1 from ProductionGroups pg 
@@ -33,6 +72,12 @@ BEGIN
      update Productions set selected = 0, updatedAt=GETDATE() where id = @productionId
    END  
 END;
+
+
+GO
+
+
+
 
 
 CREATE PROCEDURE dbo.DOZAJ_BILGI_AL
@@ -194,25 +239,6 @@ GO
 
 
 
-CREATE PROCEDURE dbo.URETIM_RESET
-    @productionId INT    
-AS
-BEGIN
-declare @amount decimal(10,3)
-select 
-	@amount = sum(pd.consumptionAmount)	
-from productiongroups pg 
-join ProductionDetails pd  on pg.id = pd.productionGroupId 
-where pg.productionId =@productionId 
-
-
-update p set p.finishedAt = GETDATE(), p.explanation = p.explanation + ' - Üretim manual bitirildi', p.productionAmount = @amount, p.updatedAt =getdate()	
-FROM productions p where id=@productionId and p.finishedAt  is NULL 
-
-update ProductionGroups set finished =1, finishedAt = GETDATE(), updatedAt =GETDATE() 
-where isnull(finished,0)=0
-
-END;
 
 -- Create procedure to retrieve error information.  
 CREATE PROCEDURE usp_GetErrorInfo  
@@ -247,6 +273,16 @@ GROUP BY formulaNo ,name) b
  ORDER BY startedAt desc
  GO
 
+CREATE procedure [dbo].[sp_FLAT_PRODUCTION_LIST] @bdate datetime, @edate datetime as 
+ select  
+ general_batchNumber = ROW_NUMBER() OVER (PARTITION BY list.formulaNo,list.sapCode,list.name,list.version ORDER BY list.startedAt),
+ list.*
+ from 
+ (select * from FLAT_PRODUCTION_LIST a
+ where a.finishedAt >= @bdate and a.finishedAt <= @edate) list
+
+ ORDER BY list.startedAt desc
+ 
 USE [tesla]
 GO
 

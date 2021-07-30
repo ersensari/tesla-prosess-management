@@ -169,6 +169,12 @@ export default defineComponent({
         },
       },
       {
+        title: "Geçen Süre(sn)",
+        dataIndex: "passedTime",
+        key: "passedTime",
+        width: 70,
+      },
+      {
         title: "Toplam Parti",
         dataIndex: "batchCount",
         key: "batchCount",
@@ -181,6 +187,12 @@ export default defineComponent({
         title: "Parti",
         dataIndex: "batchNumber",
         key: "batchNumber",
+        width: 60,
+      },
+      {
+        title: "Genel Parti",
+        dataIndex: "general_batchNumber",
+        key: "general_batchNumber",
         width: 60,
       },
       {
@@ -252,6 +264,43 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
+          merges: ["A1:N1", "A2:B2", "C2:N2"],
+          multiHeader: [
+            [
+              "ÜRETİM RAPORU",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+            ],
+            [
+              "Başlama - Bitiş Zamanı :",
+              "",
+              filters.formatDateTime(criteria.value.beginDate) +
+                " - " +
+                filters.formatDateTime(criteria.value.endDate),
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+            ],
+          ],
           header: tHeader, //Header Required
           data: formatJson(filterVal, state.result), //Specific data Required
           filename: "flat-production-list", //Optional
