@@ -8,29 +8,17 @@
       :rowKey="(r) => r.id"
       style="height: 100%"
       class="ant-table-striped"
-      :rowClassName="
-        (record, index) => (index % 2 === 1 ? 'table-striped' : null)
-      "
+      :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)"
       :bordered="true"
     >
-      <template
-        #filterDropdown="{
-          setSelectedKeys,
-          selectedKeys,
-          confirm,
-          clearFilters,
-          column,
-        }"
-      >
+      <template #filterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
         <div style="padding: 8px">
           <a-input
             ref="searchInput"
             :placeholder="`Bul: ${column.title}`"
             :value="selectedKeys[0]"
             style="width: 188px; margin-bottom: 8px; display: block"
-            @change="
-              (e) => setSelectedKeys(e.target.value ? [e.target.value] : [])
-            "
+            @change="(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
             @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
           />
           <a-button
@@ -42,13 +30,7 @@
             <template #icon><SearchOutlined /></template>
             Bul
           </a-button>
-          <a-button
-            size="small"
-            style="width: 90px"
-            @click="handleReset(clearFilters)"
-          >
-            Temizle
-          </a-button>
+          <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)"> Temizle </a-button>
         </div>
       </template>
       <template #filterIcon="filtered">
@@ -56,16 +38,8 @@
       </template>
       <template #customRender="{ text, column }">
         <span v-if="searchText && searchedColumn === column.dataIndex">
-          <template
-            v-for="(fragment, i) in text
-              .toString()
-              .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-          >
-            <mark
-              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-              class="highlight"
-              :key="i"
-            >
+          <template v-for="(fragment, i) in text.toString().split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))">
+            <mark v-if="fragment.toLowerCase() === searchText.toLowerCase()" class="highlight" :key="i">
               {{ fragment }}
             </mark>
             <template v-else>{{ fragment }}</template>
@@ -82,12 +56,7 @@
             <template #title>
               <span>Yeni Formül Ekle</span>
             </template>
-            <a-button
-              type="primary"
-              shape="circle"
-              size="small"
-              @click="onNewClick()"
-            >
+            <a-button type="primary" shape="circle" size="small" @click="onNewClick()">
               <template #icon><PlusCircleOutlined /></template>
             </a-button>
           </a-tooltip>
@@ -95,11 +64,7 @@
       </template>
       <template #operations="{ record }">
         <div style="display: flex; gap: 0.5rem">
-          <a-popconfirm
-            v-if="formulas.length"
-            title="Silmek istediğinizden emin misiniz?"
-            @confirm="onDeleteClick(record.id)"
-          >
+          <a-popconfirm v-if="formulas.length" title="Silmek istediğinizden emin misiniz?" @confirm="onDeleteClick(record.id)">
             <a-tooltip placement="topLeft">
               <template #title>
                 <span>Sil</span>
@@ -115,13 +80,7 @@
               <span>Düzenle</span>
             </template>
 
-            <a-button
-              type="primary"
-              shape="circle"
-              size="small"
-              title="Düzenle"
-              @click="onEditClick(record)"
-            >
+            <a-button type="primary" shape="circle" size="small" title="Düzenle" @click="onEditClick(record)">
               <template #icon><EditOutlined /></template>
             </a-button>
           </a-tooltip>
@@ -182,10 +141,7 @@
                     span: 14,
                   }"
                 >
-                  <a-input-number
-                    :precision="0"
-                    v-model:value="modelRef.form.version"
-                  />
+                  <a-input-number :precision="0" v-model:value="modelRef.form.version" />
                 </a-form-item>
               </a-col>
               <a-col :span="6">
@@ -251,17 +207,11 @@
             </a-row>
             <!-- Dozaj Grupları -->
             <a-row type="flex" :gutter="[4, 4]">
-              <a-col
-                :span="24"
-                v-for="group in dosingGroupItems"
-                :key="group.id"
-              >
+              <a-col :span="24" v-for="group in dosingGroupItems" :key="group.id">
                 <a-card :bordered="true" size="small" style="width: 100%">
                   <a-card-meta>
                     <template #title>
-                      <div
-                        style="display: flex; justify-content: space-between"
-                      >
+                      <div style="display: flex; justify-content: space-between">
                         <h3>{{ group.name }}</h3>
                         <a-button
                           v-if="group.manual"
@@ -283,31 +233,19 @@
                       <tr>
                         <th v-if="group.manual" style="width: 35px"></th>
                         <th style="width: 70px">Dozaj Sıra</th>
-                        <th v-if="!group.manual" style="width: 50px">
-                          Silo No
-                        </th>
+                        <th v-if="!group.manual" style="width: 50px">Silo No</th>
                         <th style="width: 100px">Mal.Kodu</th>
                         <th>Mal.Adı</th>
                         <th style="width: 80px">Miktar</th>
-                        <th v-if="!group.manual" style="width: 80px">
-                          Bit.Kesme
-                        </th>
-                        <th v-if="!group.manual" style="width: 80px">
-                          B.Kesme.Mik.
-                        </th>
-                        <th v-if="!group.manual" style="width: 80px">
-                          A.Kesme
-                        </th>
-                        <th v-if="!group.manual" style="width: 80px">
-                          Tol.(kg)
-                        </th>
+                        <th v-if="!group.manual" style="width: 80px">Bit.Kesme</th>
+                        <th v-if="!group.manual" style="width: 80px">B.Kesme.Mik.</th>
+                        <th v-if="!group.manual" style="width: 80px">A.Kesme</th>
+                        <th v-if="!group.manual" style="width: 80px">Tol.(kg)</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr
-                        v-for="detail in ld(modelRef.form.Details).filter(
-                          (x) => x.groupId === group.id
-                        )"
+                        v-for="detail in ld(modelRef.form.Details).filter((x) => x.groupId === group.id)"
                         :key="detail.id"
                         :style="setDetailRowStyle(detail)"
                       >
@@ -316,12 +254,7 @@
                             type="danger"
                             shape="circle"
                             size="small"
-                            @click="
-                              onRemoveManualAdditiveClick(
-                                detail.dosingOrder,
-                                group.id
-                              )
-                            "
+                            @click="onRemoveManualAdditiveClick(detail.dosingOrder, group.id)"
                           >
                             <template #icon>
                               <MinusCircleOutlined />
@@ -329,25 +262,14 @@
                           </a-button>
                         </td>
                         <td>
-                          <a-select
-                            v-model:value="detail.dosingOrder"
-                            style="width: 60px"
-                            v-if="!group.manual"
-                          >
-                            <a-select-option key="0" value="0"
-                              >0</a-select-option
-                            >
+                          <a-select v-model:value="detail.dosingOrder" style="width: 60px" v-if="!group.manual">
+                            <a-select-option key="0" value="0">0</a-select-option>
                             <a-select-option
-                              v-for="i in modelRef.form.Details.filter(
-                                (x) => x.groupId === group.id
-                              ).length"
+                              v-for="i in modelRef.form.Details.filter((x) => x.groupId === group.id).length"
                               :value="i"
                               :key="i"
                               :disabled="
-                                i !== 0 &&
-                                modelRef.form.Details.filter(
-                                  (x) => x.groupId === group.id
-                                ).some((x) => x.dosingOrder === i)
+                                i !== 0 && modelRef.form.Details.filter((x) => x.groupId === group.id).some((x) => x.dosingOrder === i)
                               "
                               >{{ i }}</a-select-option
                             >
@@ -356,20 +278,12 @@
                         </td>
                         <td v-if="!group.manual">
                           {{ detail.Silo.row }}
-                          <a-tooltip
-                            v-if="
-                              checkSiloRawMaterial(detail) &&
-                              detail.Silo.RawMaterial
-                            "
-                          >
+                          <a-tooltip v-if="checkSiloRawMaterial(detail) && detail.Silo.RawMaterial">
                             <template #title>
-                              Silo Malzemesi : {{ detail.Silo.RawMaterial.name
-                              }}<br />
+                              Silo Malzemesi : {{ detail.Silo.RawMaterial.name }}<br />
                               Silo malzeme uyuşmazlığı var!
                             </template>
-                            <WarningOutlined
-                              :style="{ fontSize: '16px', color: 'white' }"
-                            />
+                            <WarningOutlined :style="{ fontSize: '16px', color: 'white' }" />
                           </a-tooltip>
                         </td>
                         <td>
@@ -379,50 +293,20 @@
                           {{ detail.RawMaterial.name }}
                         </td>
                         <td>
-                          <a-input-number
-                            size="small"
-                            v-model:value="detail.amount"
-                            :precision="3"
-                            :min="0"
-                            style="width: 80px"
-                          />
+                          <a-input-number size="small" v-model:value="detail.amount" :precision="3" :min="0" style="width: 80px" />
                         </td>
 
                         <td v-if="!group.manual">
-                          <a-input-number
-                            size="small"
-                            v-model:value="detail.shutoff1"
-                            :precision="3"
-                            style="width: 80px"
-                            :min="0"
-                          />
+                          <a-input-number size="small" v-model:value="detail.shutoff1" :precision="3" style="width: 80px" :min="0" />
                         </td>
                         <td v-if="!group.manual">
-                          <a-input-number
-                            size="small"
-                            v-model:value="detail.shutoff2"
-                            :precision="3"
-                            :min="0"
-                            style="width: 80px"
-                          />
+                          <a-input-number size="small" v-model:value="detail.shutoff2" :precision="3" :min="0" style="width: 80px" />
                         </td>
                         <td v-if="!group.manual">
-                          <a-input-number
-                            size="small"
-                            v-model:value="detail.shutoff3"
-                            :precision="3"
-                            :min="0"
-                            style="width: 80px"
-                          />
+                          <a-input-number size="small" v-model:value="detail.shutoff3" :precision="3" :min="0" style="width: 80px" />
                         </td>
                         <td v-if="!group.manual">
-                          <a-input-number
-                            size="small"
-                            v-model:value="detail.tolerance"
-                            :precision="3"
-                            :min="0"
-                            style="width: 80px"
-                          />
+                          <a-input-number size="small" v-model:value="detail.tolerance" :precision="3" :min="0" style="width: 80px" />
                         </td>
                       </tr>
                     </tbody>
@@ -433,11 +317,7 @@
           </a-col>
           <!--Parametreler-->
           <a-col :span="7">
-            <a-card
-              title="Parametreler"
-              :bordered="true"
-              style="margin-left: 1rem; width: 100%; margin-bottom: 3px"
-            >
+            <a-card title="Parametreler" :bordered="true" style="margin-left: 1rem; width: 100%; margin-bottom: 3px">
               <a-form-item
                 label="Örnek kontrolü"
                 v-bind="validateInfos['form.sampleRate']"
@@ -448,10 +328,7 @@
                   span: 8,
                 }"
               >
-                <a-select
-                  v-model:value="modelRef.form.sampleRate"
-                  style="width: 120px"
-                >
+                <a-select v-model:value="modelRef.form.sampleRate" style="width: 120px">
                   <a-select-option :value="0">Alma</a-select-option>
                   <a-select-option :value="1">Her Partide</a-select-option>
                   <a-select-option :value="2">Son Partide</a-select-option>
@@ -567,9 +444,7 @@
                   span: 8,
                 }"
               >
-                <a-check
-                  v-model:checked="modelRef.form.chopperEngine1Permit"
-                ></a-check>
+                <a-check v-model:checked="modelRef.form.chopperEngine1Permit"></a-check>
               </a-form-item>
               <a-form-item
                 label="Toz Toplama İzin"
@@ -580,9 +455,7 @@
                   span: 8,
                 }"
               >
-                <a-check
-                  v-model:checked="modelRef.form.dustExtractionPermit"
-                ></a-check>
+                <a-check v-model:checked="modelRef.form.dustExtractionPermit"></a-check>
               </a-form-item>
               <a-form-item
                 label="Ham Dz2 Kantar Önce"
@@ -593,24 +466,14 @@
                   span: 8,
                 }"
               >
-                <a-check
-                  v-model:checked="modelRef.form.chopperEngine2Permit"
-                ></a-check>
+                <a-check v-model:checked="modelRef.form.chopperEngine2Permit"></a-check>
               </a-form-item>
             </a-card>
             <!--Toplamlar-->
-            <a-card
-              title="Toplamlar"
-              :bordered="true"
-              style="margin-left: 1rem; width: 100%; margin-bottom: 3px"
-            >
+            <a-card title="Toplamlar" :bordered="true" style="margin-left: 1rem; width: 100%; margin-bottom: 3px">
               <table style="width: 100%">
                 <tbody>
-                  <tr
-                    v-for="group in dosingGroupItems"
-                    :key="group.id"
-                    style="border-bottom: 1px solid #ccc"
-                  >
+                  <tr v-for="group in dosingGroupItems" :key="group.id" style="border-bottom: 1px solid #ccc">
                     <th>{{ group.name }}</th>
                     <td>{{ getGroupTotal(group.id) }}</td>
                   </tr>
@@ -627,18 +490,27 @@
 
       <template #extra>
         <span style="padding: 3px">
-          <a-button key="back" @click="onModalCancelClick" :disabled="loading"
-            >İptal</a-button
-          >
+          <a-button key="back" @click="onModalCancelClick" :disabled="loading">İptal</a-button>
         </span>
         <span style="padding: 3px">
-          <a-button
+          <a-dropdown-button @click.prevent="onModalSaveClick" type="primary">
+            Kaydet
+            <template #overlay>
+              <a-menu>
+                <a-menu-item key="1" @click="onModalSaveAsClick" :disabled="!modelRef.form.id || modelRef.form.id === 0"
+                  >Farklı Kaydet</a-menu-item
+                >
+              </a-menu>
+            </template>
+          </a-dropdown-button>
+
+          <!-- <a-button
             key="submit"
             type="primary"
             :loading="loading"
             @click.prevent="onModalSaveClick"
-            >Kaydet</a-button
-          >
+            v-if="!modelRef.form.id || modelRef.form.id !== 0"
+            >Kaydet</a-button> -->
         </span>
       </template>
     </a-card>
@@ -650,17 +522,9 @@
   />
 </template>
 <script>
-import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
-import _ from "lodash";
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  reactive,
-  ref,
-  toRaw,
-  watch,
-} from "vue";
+import locale from 'ant-design-vue/es/date-picker/locale/tr_TR';
+import _ from 'lodash';
+import { computed, defineComponent, onMounted, reactive, ref, toRaw, watch } from 'vue';
 import {
   Table,
   Button,
@@ -678,7 +542,9 @@ import {
   Checkbox,
   Select,
   Icon,
-} from "ant-design-vue";
+  Dropdown,
+  Menu,
+} from 'ant-design-vue';
 import {
   SearchOutlined,
   DeleteOutlined,
@@ -686,69 +552,69 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
   WarningOutlined,
-} from "@ant-design/icons-vue";
-import { useForm } from "@ant-design-vue/use";
-import { useState, useActions, useMutations } from "@/store/hooks";
-import RawMaterialsModal from "./RawMaterialsModal";
+  DownOutlined,
+} from '@ant-design/icons-vue';
+import { useForm } from '@ant-design-vue/use';
+import { useState, useActions, useMutations } from '@/store/hooks';
+import RawMaterialsModal from './RawMaterialsModal';
 export default defineComponent({
-  name: "Formulas",
+  name: 'Formulas',
   components: {
-    "raw-materials-modal": RawMaterialsModal,
-    "a-table": Table,
-    "a-button": Button,
-    "a-input": Input,
-    "a-input-number": InputNumber,
-    "a-popconfirm": Popconfirm,
-    "a-modal": Modal,
-    "a-tooltip": Tooltip,
-    "a-form": Form,
-    "a-form-item": Form.Item,
-    "a-date-picker": DatePicker,
-    "a-row": Row,
-    "a-col": Col,
-    "a-card": Card,
-    "a-card-meta": Card.Meta,
-    "a-check": Checkbox,
-    "a-select": Select,
-    "a-select-option": Select.Option,
-    "a-icon": Icon,
+    'raw-materials-modal': RawMaterialsModal,
+    'a-table': Table,
+    'a-button': Button,
+    'a-input': Input,
+    'a-input-number': InputNumber,
+    'a-popconfirm': Popconfirm,
+    'a-modal': Modal,
+    'a-tooltip': Tooltip,
+    'a-form': Form,
+    'a-form-item': Form.Item,
+    'a-date-picker': DatePicker,
+    'a-row': Row,
+    'a-col': Col,
+    'a-card': Card,
+    'a-card-meta': Card.Meta,
+    'a-check': Checkbox,
+    'a-select': Select,
+    'a-select-option': Select.Option,
+    'a-icon': Icon,
+    'a-dropdown': Dropdown,
+    'a-dropdown-button': Dropdown.Button,
+    'a-menu': Menu,
+    'a-menu-item': Menu.Item,
     SearchOutlined,
     DeleteOutlined,
     EditOutlined,
     PlusCircleOutlined,
     MinusCircleOutlined,
     WarningOutlined,
+    DownOutlined,
   },
   setup() {
-    const searchText = ref("");
-    const searchedColumn = ref("");
+    const searchText = ref('');
+    const searchedColumn = ref('');
     const searchInput = ref();
-    const editModalTitle = ref("");
+    const editModalTitle = ref('');
     const rawMaterialsSelectModalVisible = ref(false);
 
-    const { formulas, loading, notification, editMode } = useState(
-      ["formulas", "loading", "notification", "editMode"],
-      "formula"
-    );
-    const { findAll, save, update, remove } = useActions(
-      ["findAll", "save", "update", "remove"],
-      "formula"
-    );
+    const { formulas, loading, notification, editMode } = useState(['formulas', 'loading', 'notification', 'editMode'], 'formula');
+    const { findAll, save, update, remove } = useActions(['findAll', 'save', 'update', 'remove'], 'formula');
 
-    const dosingGroup = useActions(["findAll"], "dosingGroup");
-    const { items: dosingGroupItems } = useState(["items"], "dosingGroup");
+    const dosingGroup = useActions(['findAll'], 'dosingGroup');
+    const { items: dosingGroupItems } = useState(['items'], 'dosingGroup');
 
-    const { setEditMode } = useMutations(["setEditMode"], "formula");
+    const { setEditMode } = useMutations(['setEditMode'], 'formula');
     const modelRef = reactive({
       form: {
         id: undefined,
-        formulaNo: "", //DataTypes.STRING,
-        version: "", //DataTypes.STRING,
-        name: "", //DataTypes.STRING,
-        shortName: "", // DataTypes.STRING,
-        explanation: "", //DataTypes.STRING,
-        formulaDate: "", //DataTypes.DATE,
-        sapCode: "", //DataTypes.STRING,
+        formulaNo: '', //DataTypes.STRING,
+        version: '', //DataTypes.STRING,
+        name: '', //DataTypes.STRING,
+        shortName: '', // DataTypes.STRING,
+        explanation: '', //DataTypes.STRING,
+        formulaDate: '', //DataTypes.DATE,
+        sapCode: '', //DataTypes.STRING,
         sampleRate: 0, //DataTypes.INTEGER,
         mixerBottomCoverOpeningTime: 0, // DataTypes.INTEGER,
         mixerLowSpeedRunSet: 0, //DataTypes.INTEGER,
@@ -764,87 +630,68 @@ export default defineComponent({
     });
 
     const rulesRef = reactive({
-      "form.name": [
-        { required: true, message: "Formül Adı Zorunlu.", type: "string" },
-      ],
-      "form.shortName": [
-        { required: true, message: "Formül Kısa Adı Zorunlu.", type: "string" },
-      ],
-      "form.sapCode": [
-        { required: true, message: "SAP Kodu Zorunlu.", type: "string" },
-      ],
-      "form.version": [
-        { required: true, message: "Versiyon No Zorunlu.", type: "integer" },
-      ],
-      "form.formulaNo": [
-        { required: true, message: "Formül No Zorunlu.", type: "string" },
-      ],
-      "form.formulaDate": [
-        { required: true, message: "Formül Tarihi Zorunlu.", type: "date" },
-      ],
-      "form.sampleRate": [
+      'form.name': [{ required: true, message: 'Formül Adı Zorunlu.', type: 'string' }],
+      'form.shortName': [{ required: true, message: 'Formül Kısa Adı Zorunlu.', type: 'string' }],
+      'form.sapCode': [{ required: true, message: 'SAP Kodu Zorunlu.', type: 'string' }],
+      'form.version': [{ required: true, message: 'Versiyon No Zorunlu.', type: 'integer' }],
+      'form.formulaNo': [{ required: true, message: 'Formül No Zorunlu.', type: 'string' }],
+      'form.formulaDate': [{ required: true, message: 'Formül Tarihi Zorunlu.', type: 'date' }],
+      'form.sampleRate': [
         {
           required: true,
-          message: "Örnek Zorunlu.",
-          type: "integer",
+          message: 'Örnek Zorunlu.',
+          type: 'integer',
         },
       ],
-      "form.mixerBottomCoverOpeningTime": [
+      'form.mixerBottomCoverOpeningTime': [
         {
           required: true,
-          message: "Mikser Alt Kapak Açılma Zamanı Zorunlu.",
-          type: "integer",
+          message: 'Mikser Alt Kapak Açılma Zamanı Zorunlu.',
+          type: 'integer',
         },
       ],
-      "form.mixerLowSpeedRunSet": [
+      'form.mixerLowSpeedRunSet': [
         {
           required: true,
-          message: "Mikser Düşük Hız Çalışma Set Zorunlu.",
-          type: "integer",
+          message: 'Mikser Düşük Hız Çalışma Set Zorunlu.',
+          type: 'integer',
         },
       ],
-      "form.mixerHighSpeedRunSet": [
+      'form.mixerHighSpeedRunSet': [
         {
           required: true,
-          message: "Mikser Yüksek Hız Çalışma Set Zorunlu.",
-          type: "integer",
+          message: 'Mikser Yüksek Hız Çalışma Set Zorunlu.',
+          type: 'integer',
         },
       ],
-      "form.mixerMixTime": [
+      'form.mixerMixTime': [
         {
           required: true,
-          message: "Mikser Karıştırma Süresi Zorunlu.",
-          type: "integer",
+          message: 'Mikser Karıştırma Süresi Zorunlu.',
+          type: 'integer',
         },
       ],
-      "form.chopperEnginesRuningTime": [
+      'form.chopperEnginesRuningTime': [
         {
           required: true,
-          message: "Chopper Motorların Süresi Zorunlu.",
-          type: "integer",
+          message: 'Chopper Motorların Süresi Zorunlu.',
+          type: 'integer',
         },
       ],
     });
 
-    const { validate, validateInfos, resetFields } = useForm(
-      modelRef,
-      rulesRef
-    );
+    const { validate, validateInfos, resetFields } = useForm(modelRef, rulesRef);
 
     const filterMethods = (columnName) => {
       return {
         slots: {
-          filterDropdown: "filterDropdown",
-          filterIcon: "filterIcon",
-          customRender: "customRender",
+          filterDropdown: 'filterDropdown',
+          filterIcon: 'filterIcon',
+          customRender: 'customRender',
         },
         sorter: (a, b) => a[columnName].length - b[columnName].length,
-        sortDirections: ["descend", "ascend"],
-        onFilter: (value, record) =>
-          record[columnName]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase()),
+        sortDirections: ['descend', 'ascend'],
+        onFilter: (value, record) => record[columnName].toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -858,67 +705,67 @@ export default defineComponent({
     const columns = [
       {
         width: 85,
-        key: "operations",
-        slots: { customRender: "operations", title: "newButton" },
+        key: 'operations',
+        slots: { customRender: 'operations', title: 'newButton' },
       },
       {
-        title: "Formül No",
-        dataIndex: "formulaNo",
-        key: "formulaNo",
+        title: 'Formül No',
+        dataIndex: 'formulaNo',
+        key: 'formulaNo',
         width: 140,
-        ...filterMethods("formulaNo"),
+        ...filterMethods('formulaNo'),
       },
       {
-        title: "Ver.",
-        dataIndex: "version",
-        key: "version",
+        title: 'Ver.',
+        dataIndex: 'version',
+        key: 'version',
         width: 100,
-        ...filterMethods("version"),
+        ...filterMethods('version'),
       },
       {
-        title: "SAP Kodu",
-        dataIndex: "sapCode",
-        key: "sapCode",
+        title: 'SAP Kodu',
+        dataIndex: 'sapCode',
+        key: 'sapCode',
         width: 150,
-        ...filterMethods("sapCode"),
+        ...filterMethods('sapCode'),
       },
       {
-        title: "Tam Adı",
-        dataIndex: "name",
-        key: "name",
+        title: 'Tam Adı',
+        dataIndex: 'name',
+        key: 'name',
         width: 300,
-        ...filterMethods("name"),
+        ...filterMethods('name'),
       },
       {
-        title: "Kısa Adı",
-        dataIndex: "shortName",
-        key: "shortName",
+        title: 'Kısa Adı',
+        dataIndex: 'shortName',
+        key: 'shortName',
         width: 150,
-        ...filterMethods("shortName"),
+        ...filterMethods('shortName'),
       },
       {
-        title: "Tarih",
-        dataIndex: "formulaDate",
-        key: "formulaDate",
+        title: 'Tarih',
+        dataIndex: 'formulaDate',
+        key: 'formulaDate',
         width: 120,
         slots: {
-          customRender: "formulaDate",
+          customRender: 'formulaDate',
         },
       },
       {
-        title: "Açıklama",
-        dataIndex: "explanation",
-        key: "explanation",
+        title: 'Açıklama',
+        dataIndex: 'explanation',
+        key: 'explanation',
         ellipsis: true,
-        ...filterMethods("explanation"),
+        ...filterMethods('explanation'),
       },
       {
-        title: "Toplam",
-        dataIndex: "total",
-        key: "total",
+        title: 'Toplam',
+        dataIndex: 'total',
+        key: 'total',
         width: 100,
         slots: {
-          customRender: "totalAmount",
+          customRender: 'totalAmount',
         },
       },
     ];
@@ -931,19 +778,19 @@ export default defineComponent({
 
     const handleReset = (clearFilters) => {
       clearFilters();
-      searchText.value = "";
+      searchText.value = '';
     };
 
     const onNewClick = () => {
       resetFields();
-      editModalTitle.value = "Yeni Ekle";
+      editModalTitle.value = 'Yeni Ekle';
       setEditMode(true);
       if (dosingGroupItems.value.length > 0) {
         const details = dosingGroupItems.value.flatMap((x) =>
           x.Silos.map((s) => {
             return {
               id: undefined,
-              formulaId: modelRef.id,
+              formulaId: undefined,
               groupId: x.id,
               siloId: s.id,
               Silo: s,
@@ -963,13 +810,38 @@ export default defineComponent({
     };
 
     const onEditClick = (item) => {
+      const details = dosingGroupItems.value.flatMap((x) =>
+        x.Silos.map((s) => {
+          const detail = item.Details.find((d) => d.dosingOrder > 0 && d.groupId === x.id && d.siloId === s.id);
+          return detail
+            ? detail
+            : {
+                id: undefined,
+                formulaId: item.id,
+                groupId: x.id,
+                siloId: s.id,
+                Silo: s,
+                rawMaterialId: s.rawMaterialId,
+                RawMaterial: s.RawMaterial,
+                dosingOrder: 0,
+                amount: 0,
+                shutoff1: 0,
+                shutoff2: 0,
+                shutoff3: 0,
+                tolerance: 0,
+              };
+        })
+      );
+      item.Details = details.concat(item.Details.filter((d) => d.dosingOrder > 0 && d.siloId === null && d.DosingGroup.manual));
       modelRef.form = item;
       setEditMode(true);
-      editModalTitle.value = "Düzenle";
+      editModalTitle.value = 'Düzenle';
     };
     const onModalSaveClick = () => {
       validate()
         .then(() => {
+          modelRef.form.Details = modelRef.form.Details.filter((x) => x.dosingOrder !== 0);
+
           if (modelRef.form.id) {
             update(toRaw(modelRef.form)).then((result) => {
               findAll();
@@ -984,17 +856,64 @@ export default defineComponent({
 
           modelRef.form.Details.map((x) => {
             if (x.deleted) {
-              const itemIndex = modelRef.form.Details.findIndex(
-                (d) => d.id == x.id
-              );
+              const itemIndex = modelRef.form.Details.findIndex((d) => d.id == x.id);
               modelRef.form.Details.splice(itemIndex, 1);
             }
           });
         })
         .catch((err) => {
-          showNotify["error"]({
-            message: "Veri giriş hatası!",
-            description: "Lütfen formu kontrol ediniz.",
+          showNotify['error']({
+            message: 'Veri giriş hatası!',
+            description: 'Lütfen formu kontrol ediniz. \r\n' + err.message,
+          });
+        });
+    };
+
+    const onModalSaveAsClick = () => {
+      validate()
+        .then(() => {
+          const maxVer = _.maxBy(
+            formulas.value.filter(
+              (x) => x.formulaNo === modelRef.form.formulaNo && x.name === modelRef.form.name && x.sapCode === modelRef.form.sapCode
+            ),
+            'version'
+          ).version;
+
+          modelRef.form.name = 'KOPYASI ' + modelRef.form.name;
+          modelRef.form.version = maxVer + 1;
+          modelRef.form.id = null;
+          modelRef.form.createdAt = undefined;
+          modelRef.form.updatedAt = undefined;
+          modelRef.form.Details = modelRef.form.Details.filter((x) => x.dosingOrder !== 0);
+
+          modelRef.form.Details.map((x) => {
+            if (x.deleted) {
+              const itemIndex = modelRef.form.Details.findIndex((d) => d.id == x.id);
+              modelRef.form.Details.splice(itemIndex, 1);
+            }
+          });
+
+          modelRef.form.Details.filter((x) => !x.DosingGroup.manual).map((x) => {
+            x.rawMaterialId = x.Silo.rawMaterialId;
+            x.id = undefined;
+            x.formulaId = undefined;
+            x.createdAt = undefined;
+            x.updatedAt = undefined;
+          });
+
+          save(toRaw(modelRef.form))
+            .then((result) => {
+              findAll();
+              modelRef.form = result;
+            })
+            .catch((err) => {
+              throw new Exception(err.message);
+            });
+        })
+        .catch((err) => {
+          showNotify['error']({
+            message: 'Veri giriş hatası!',
+            description: 'Lütfen formu kontrol ediniz. \r\n' + err.message,
           });
         });
     };
@@ -1014,9 +933,7 @@ export default defineComponent({
     };
 
     const onRemoveManualAdditiveClick = (order, groupId) => {
-      const itemIndex = modelRef.form.Details.findIndex(
-        (x) => x.groupId === groupId && x.dosingOrder === order
-      );
+      const itemIndex = modelRef.form.Details.findIndex((x) => x.groupId === groupId && x.dosingOrder === order);
       const item = modelRef.form.Details[itemIndex];
 
       if (item !== null) {
@@ -1025,15 +942,18 @@ export default defineComponent({
         } else {
           modelRef.form.Details.splice(itemIndex, 1);
         }
-        modelRef.form.Details.filter((x) => x.groupId === groupId).map(
-          (x, i) => {
-            if (x.deleted) {
-              x.dosingOrder = -1;
-            } else {
-              x.dosingOrder = i + 1;
-            }
+        modelRef.form.Details.filter((x) => x.groupId === groupId).map((x, i) => {
+          if (x.deleted) {
+            x.dosingOrder = -1;
           }
-        );
+        });
+
+        _.orderBy(
+          modelRef.form.Details.filter((x) => x.groupId === groupId && x.dosingOrder > 0),
+          (x) => x.dosingOrder
+        ).map((x, i) => {
+          x.dosingOrder = i + 1;
+        });
       }
     };
     const onRawMaterialSelect = (rawMaterial) => {
@@ -1044,13 +964,7 @@ export default defineComponent({
       rawMaterialsSelectModalVisible.value = false;
     };
     const addManualAdditive = (groupId, rawMaterial) => {
-      const order =
-        Math.max(
-          ...modelRef.form.Details.filter((x) => x.groupId === groupId).map(
-            (x) => x.dosingOrder
-          ),
-          0
-        ) + 1;
+      const order = Math.max(...modelRef.form.Details.filter((x) => x.groupId === groupId).map((x) => x.dosingOrder), 0) + 1;
       modelRef.form.Details.push({
         id: undefined,
         formulaId: modelRef.form.id,
@@ -1101,20 +1015,19 @@ export default defineComponent({
       return _.round(g.sum, 3);
     };
 
-    const checkSiloRawMaterial = (detail) =>
-      detail.Silo && detail.rawMaterialId !== detail.Silo.rawMaterialId;
+    const checkSiloRawMaterial = (detail) => detail.Silo && detail.dosingOrder > 0 && detail.rawMaterialId !== detail.Silo.rawMaterialId;
 
     const setDetailRowStyle = (detail) => {
       let style = {};
       if (detail.deleted) {
         style = {
-          "background-color": "red",
+          'background-color': 'red',
         };
       }
 
-      if (detail.Silo && detail.rawMaterialId !== detail.Silo.rawMaterialId) {
+      if (detail.Silo && detail.dosingOrder > 0 && detail.rawMaterialId !== detail.Silo.rawMaterialId) {
         style = {
-          "background-color": "#ff5349",
+          'background-color': '#ff5349',
         };
       }
 
@@ -1135,9 +1048,12 @@ export default defineComponent({
     });
 
     const getFormulaTotalAmount = (formula) =>
-      _(formula.Details)
-        .filter((x) => x.dosingOrder >= 0)
-        .sumBy((x) => x.amount);
+      _.round(
+        _(formula.Details)
+          .filter((x) => x.dosingOrder >= 0)
+          .sumBy((x) => x.amount),
+        3
+      );
     return {
       ld: _,
       formulas,
@@ -1171,6 +1087,7 @@ export default defineComponent({
       checkSiloRawMaterial,
       getFormulaTotalAmount,
       calcGroupTotal,
+      onModalSaveAsClick,
     };
   },
 });

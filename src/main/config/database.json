@@ -1,5 +1,5 @@
 {
-  "is-development": {
+  "development": {
     "username": "sa",
     "password": "1",
     "database": "tesla",
@@ -42,7 +42,7 @@
     },
     "timezone": "+03:00"
   },
-  "production": {
+  "--production": {
     "username": "sa",
     "password": "Tesla2021.",
     "database": "tesla",
@@ -57,7 +57,7 @@
     },
     "timezone": "+03:00"
   },
-  "cc-production": {
+  "production": {
     "username": "sa",
     "password": "1",
     "database": "tesla",

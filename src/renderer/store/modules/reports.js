@@ -1,6 +1,6 @@
-import { ipcRenderer } from "electron";
-import moment from "moment";
-const MODULE_NAME = "reports";
+import { ipcRenderer } from 'electron';
+import moment from 'moment';
+const MODULE_NAME = 'reports';
 
 const state = {
   loading: false,
@@ -32,81 +32,68 @@ const mutations = {
 const actions = {
   flatProductionList: ({ commit }, criteria) => {
     return new Promise((resolve, reject) => {
-      commit("setLoadingStatus", true);
+      commit('setLoadingStatus', true);
 
-      ipcRenderer.once(
-        MODULE_NAME + ".flatProductionListCompleted",
-        (_, result) => {
-          resolve(result);
-          commit("setLoadingStatus", false);
-        }
-      );
-      ipcRenderer.once(MODULE_NAME + ".flatProductionListError", (_, error) => {
-        commit("setError", error);
-        commit("setLoadingStatus", false);
-        commit("setNotification", {
-          type: "error",
-          message: "Hata oluştu !",
+      ipcRenderer.once(MODULE_NAME + '.flatProductionListCompleted', (_, result) => {
+        resolve(result);
+        commit('setLoadingStatus', false);
+      });
+
+      ipcRenderer.once(MODULE_NAME + '.flatProductionListError', (_, error) => {
+        commit('setError', error);
+        commit('setLoadingStatus', false);
+        commit('setNotification', {
+          type: 'error',
+          message: 'Hata oluştu !',
           description: error.message,
         });
         reject(error);
       });
-      ipcRenderer.send(
-        MODULE_NAME + ".flatProductionList",
-        JSON.parse(JSON.stringify(criteria))
-      );
+
+      ipcRenderer.send(MODULE_NAME + '.flatProductionList', JSON.parse(JSON.stringify(criteria)));
     });
   },
   groupedProductionList: ({ commit }, criteria) => {
     return new Promise((resolve, reject) => {
-      commit("setLoadingStatus", true);
+      commit('setLoadingStatus', true);
 
-      ipcRenderer.once(
-        MODULE_NAME + ".groupedProductionListCompleted",
-        (_, result) => {
-          resolve(result);
-          commit("setLoadingStatus", false);
-        }
-      );
-      ipcRenderer.once(
-        MODULE_NAME + ".groupedProductionListError",
-        (_, error) => {
-          commit("setError", error);
-          commit("setLoadingStatus", false);
-          commit("setNotification", {
-            type: "error",
-            message: "Hata oluştu !",
-            description: error.message,
-          });
-          reject(error);
-        }
-      );
-      ipcRenderer.send(
-        MODULE_NAME + ".groupedProductionList",
-        JSON.parse(JSON.stringify(criteria))
-      );
+      ipcRenderer.once(MODULE_NAME + '.groupedProductionListCompleted', (_, result) => {
+        resolve(result);
+        commit('setLoadingStatus', false);
+      });
+      ipcRenderer.once(MODULE_NAME + '.groupedProductionListError', (_, error) => {
+        commit('setError', error);
+        commit('setLoadingStatus', false);
+        commit('setNotification', {
+          type: 'error',
+          message: 'Hata oluştu !',
+          description: error.message,
+        });
+        reject(error);
+      });
+      ipcRenderer.send(MODULE_NAME + '.groupedProductionList', JSON.parse(JSON.stringify(criteria)));
     });
   },
 
   findByPk: ({ commit }, id) => {
     new Promise((resolve, reject) => {
-      commit("setLoadingStatus", true);
+      commit('setLoadingStatus', true);
 
-      ipcRenderer.once(MODULE_NAME + ".findByPkCompleted", (_, result) => {
+      ipcRenderer.once(MODULE_NAME + '.findByPkCompleted', (_, result) => {
         resolve(result);
-        commit("setLoadingStatus", false);
+        commit('setLoadingStatus', false);
       });
-      ipcRenderer.once(MODULE_NAME + ".findByPkError", (_, error) => {
-        commit("setError", error);
-        commit("setLoadingStatus", false);
-        commit("setNotification", {
-          type: "error",
-          message: "Hata oluştu !",
+      ipcRenderer.once(MODULE_NAME + '.findByPkError', (_, error) => {
+        commit('setError', error);
+        commit('setLoadingStatus', false);
+        commit('setNotification', {
+          type: 'error',
+          message: 'Hata oluştu !',
           description: error.message,
         });
         reject(error);
       });
-      ipcRenderer.send(MODULE_NAME + ".findByPk", id);
+      ipcRenderer.send(MODULE_NAME + '.findByPk', id);
     });
   },
 };
