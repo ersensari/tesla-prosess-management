@@ -54,92 +54,83 @@
       <template #diffAmount="{ record }">
         {{ round(record.diff, 3) }}
       </template>
-      <template #diffPercent="{ record }">
-        {{ round(record.diffPercent, 2) }} %
-      </template>
+      <template #diffPercent="{ record }"> {{ round(record.diffPercent, 2) }} % </template>
     </a-table>
   </div>
 </template>
 <script>
-import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
-import _, { round } from "lodash";
-import { defineComponent, inject, reactive, ref } from "vue";
-const excel = () => import("@/components/Export2Excel");
-import {
-  Table,
-  Button,
-  Input,
-  Popconfirm,
-  Tooltip,
-  DatePicker,
-} from "ant-design-vue";
-import { FileExcelOutlined } from "@ant-design/icons-vue";
-import { useState, useActions } from "@/store/hooks";
+import locale from 'ant-design-vue/es/date-picker/locale/tr_TR';
+import _, { round } from 'lodash';
+import { defineComponent, inject, reactive, ref } from 'vue';
+const excel = () => import('@/components/Export2Excel');
+import { Table, Button, Input, Popconfirm, Tooltip, DatePicker } from 'ant-design-vue';
+import { FileExcelOutlined } from '@ant-design/icons-vue';
+import { useState, useActions } from '@/store/hooks';
 export default defineComponent({
-  name: "BasicProduction",
+  name: 'BasicProduction',
   components: {
-    "a-table": Table,
-    "a-button": Button,
-    "a-input": Input,
-    "a-popconfirm": Popconfirm,
-    "a-tooltip": Tooltip,
-    "a-date-picker": DatePicker,
+    'a-table': Table,
+    'a-button': Button,
+    'a-input': Input,
+    'a-popconfirm': Popconfirm,
+    'a-tooltip': Tooltip,
+    'a-date-picker': DatePicker,
     FileExcelOutlined,
   },
   setup() {
     const columns = [
       {
-        title: "Formül No",
-        dataIndex: "formulaNo",
-        key: "formulaNo",
+        title: 'Formül No',
+        dataIndex: 'formulaNo',
+        key: 'formulaNo',
         width: 120,
       },
       {
-        title: "Formül Adı",
-        dataIndex: "name",
-        key: "name",
+        title: 'Formül Adı',
+        dataIndex: 'name',
+        key: 'name',
         ellipsis: true,
       },
       {
-        title: "Parti Sayısı",
-        dataIndex: "batchCount",
-        key: "batchCount",
+        title: 'Parti Sayısı',
+        dataIndex: 'batchCount',
+        key: 'batchCount',
         width: 100,
       },
       {
-        title: "Hedef Miktar",
-        dataIndex: "targetTotal",
-        key: "targetTotal",
+        title: 'Hedef Miktar',
+        dataIndex: 'targetTotal',
+        key: 'targetTotal',
         width: 100,
         slots: {
-          customRender: "targetTotal",
+          customRender: 'targetTotal',
         },
       },
       {
-        title: "Üretilen Miktar",
-        dataIndex: "consumptionTotal",
-        key: "consumptionTotal",
+        title: 'Üretilen Miktar',
+        dataIndex: 'consumptionTotal',
+        key: 'consumptionTotal',
         width: 100,
         slots: {
-          customRender: "consumptionTotal",
+          customRender: 'consumptionTotal',
         },
       },
       {
-        title: "Fark",
-        dataIndex: "diff",
-        key: "diff",
+        title: 'Fark',
+        dataIndex: 'diff',
+        key: 'diff',
         width: 100,
         slots: {
-          customRender: "diffAmount",
+          customRender: 'diffAmount',
         },
       },
       {
-        title: "Fark Yüzdesi",
-        dataIndex: "diffPercent",
-        key: "diffPercent",
+        title: 'Fark Yüzdesi',
+        dataIndex: 'diffPercent',
+        key: 'diffPercent',
         width: 100,
         slots: {
-          customRender: "diffPercent",
+          customRender: 'diffPercent',
         },
       },
     ];
@@ -171,11 +162,8 @@ export default defineComponent({
       endOpen.value = open;
     };
 
-    const { criteria } = useState(["criteria"], "reports");
-    const { groupedProductionList } = useActions(
-      ["groupedProductionList"],
-      "reports"
-    );
+    const { criteria } = useState(['criteria'], 'reports');
+    const { groupedProductionList } = useActions(['groupedProductionList'], 'reports');
 
     const state = reactive({
       list: [],
@@ -190,15 +178,15 @@ export default defineComponent({
       state.list = result.list;
     };
 
-    const filters = inject("filters");
+    const filters = inject('filters');
 
     const exportExcel = () => {
       const tHeader = columns.map((x) => x.title);
       const filterVal = columns.map((x) => x.dataIndex);
       const data = formatJson(filterVal, state.list);
       const footer = [
-        "TOPLAM:",
-        "",
+        'TOPLAM:',
+        '',
         _(state.list).sumBy((x) => x.batchCount),
         round(
           _(state.list).sumBy((x) => x.targetTotal),
@@ -208,13 +196,9 @@ export default defineComponent({
           _(state.list).sumBy((x) => x.consumptionTotal),
           3
         ),
+        round(_(state.list).sumBy((x) => x.consumptionTotal) - _(state.list).sumBy((x) => x.targetTotal)),
         round(
-          _(state.list).sumBy((x) => x.consumptionTotal) -
-            _(state.list).sumBy((x) => x.targetTotal)
-        ),
-        round(
-          ((_(state.list).sumBy((x) => x.consumptionTotal) -
-            _(state.list).sumBy((x) => x.targetTotal)) /
+          ((_(state.list).sumBy((x) => x.consumptionTotal) - _(state.list).sumBy((x) => x.targetTotal)) /
             _(state.list).sumBy((x) => x.targetTotal)) *
             100,
           2
@@ -223,26 +207,24 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
-          merges: ["A1:G1", "A2:B2", "C2:G2"],
+          merges: ['A1:G1', 'A2:B2', 'C2:G2'],
           multiHeader: [
-            ["TEMEL ÜRETİM RAPORU", "", "", "", "", "", ""],
+            ['TEMEL ÜRETİM RAPORU', '', '', '', '', '', ''],
             [
-              "Başlama - Bitiş Zamanı :",
-              "",
-              filters.formatDateTime(criteria.value.beginDate) +
-                " - " +
-                filters.formatDateTime(criteria.value.endDate),
-              "",
-              "",
-              "",
-              "",
+              'Başlama - Bitiş Zamanı :',
+              '',
+              filters.formatDateTime(criteria.value.beginDate) + ' - ' + filters.formatDateTime(criteria.value.endDate),
+              '',
+              '',
+              '',
+              '',
             ],
           ],
           header: tHeader, //Header Required
           data: data.concat([footer]), //Specific data Required
-          filename: "basic-production-list", //Optional
+          filename: 'basic-production-list', //Optional
           autoWidth: true, //Optional
-          bookType: "xlsx", //Optional
+          bookType: 'xlsx', //Optional
         });
       });
     };
@@ -251,11 +233,11 @@ export default defineComponent({
       return jsonData.map((v) =>
         filterVal.map((j) => {
           switch (j) {
-            case "targetTotal":
-            case "consumptionTotal":
-            case "diff":
+            case 'targetTotal':
+            case 'consumptionTotal':
+            case 'diff':
               return round(v[j], 3);
-            case "diffPercent":
+            case 'diffPercent':
               return round(v[j], 2);
 
             default:

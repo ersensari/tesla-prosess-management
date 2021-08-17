@@ -1,23 +1,18 @@
-const db = require("../index");
-const moment = require("moment");
-const { QueryTypes, Op } = require("sequelize");
+const db = require('../index');
+const moment = require('moment');
+const { QueryTypes, Op } = require('sequelize');
 module.exports = {
   queries: {
     flatProductionList: async (criteria) => {
-      let endDate =
-        criteria.beginDate === criteria.endDate
-          ? moment(criteria.beginDate).add(23, "h").add(59, "m")._d
-          : criteria.endDate;
+      let endDate = criteria.beginDate === criteria.endDate ? moment(criteria.beginDate).add(23, 'h').add(59, 'm')._d : criteria.endDate;
 
       const result = await db.sequelize.query(
-        "exec sp_FLAT_PRODUCTION_LIST :beginDate, :endDate",
+        'exec sp_FLAT_PRODUCTION_LIST :beginDate, :endDate',
         //"select fpl.* from FLAT_PRODUCTION_LIST fpl WHERE fpl.finishedAt >= :beginDate and fpl.finishedAt <= :endDate ORDER BY fpl.startedAt desc",
         {
           replacements: {
-            beginDate: new Date(
-              moment(criteria.beginDate).format("YYYY-MM-DD HH:mm")
-            ),
-            endDate: new Date(moment(endDate).format("YYYY-MM-DD HH:mm")),
+            beginDate: new Date(moment(criteria.beginDate).format('YYYY-MM-DD HH:mm')),
+            endDate: new Date(moment(endDate).format('YYYY-MM-DD HH:mm')),
           },
           type: QueryTypes.SELECT,
         }
@@ -26,39 +21,29 @@ module.exports = {
       return result;
     },
     groupedProductionList: async (criteria) => {
-      let endDate =
-        criteria.beginDate === criteria.endDate
-          ? moment(criteria.beginDate).add(23, "h").add(59, "m")._d
-          : criteria.endDate;
+      let endDate = criteria.beginDate === criteria.endDate ? moment(criteria.beginDate).add(23, 'h').add(59, 'm')._d : criteria.endDate;
 
-      const list = await db.sequelize.query(
-        "exec sp_GROUPED_PRODUCTION_LIST  :beginDate,  :endDate",
-        {
-          replacements: {
-            beginDate: new Date(
-              moment(criteria.beginDate).format("YYYY-MM-DD HH:mm")
-            ),
-            endDate: new Date(moment(endDate).format("YYYY-MM-DD HH:mm")),
-          },
-          type: QueryTypes.SELECT,
-        }
-      );
+      const list = await db.sequelize.query('exec sp_GROUPED_PRODUCTION_LIST  :beginDate,  :endDate', {
+        replacements: {
+          beginDate: new Date(moment(criteria.beginDate).format('YYYY-MM-DD HH:mm')),
+          endDate: new Date(moment(endDate).format('YYYY-MM-DD HH:mm')),
+        },
+        type: QueryTypes.SELECT,
+      });
       let details = null;
       if (criteria.getDetail) {
         details = (
           await db.ProductionGroup.findAll({
             where: {
               productionId: {
-                [Op.in]: eval(
-                  "[" + list.map((x) => x.productionIds).join(",") + "]"
-                ),
+                [Op.in]: eval('[' + list.map((x) => x.productionIds).join(',') + ']'),
               },
             },
             include: [
               {
                 model: db.ProductionDetail,
-                as: "Details",
-                include: ["RawMaterial"],
+                as: 'Details',
+                include: ['RawMaterial'],
               },
             ],
           })
@@ -72,28 +57,28 @@ module.exports = {
         include: [
           {
             model: db.ProductionGroup,
-            as: "Groups",
+            as: 'Groups',
             include: [
               {
                 model: db.DosingGroup,
               },
               {
                 model: db.ProductionDetail,
-                as: "Details",
+                as: 'Details',
                 include: [
                   {
                     model: db.Silo,
-                    include: ["RawMaterial"],
+                    include: ['RawMaterial'],
                   },
-                  "RawMaterial",
+                  'RawMaterial',
                 ],
               },
             ],
           },
           {
             model: db.ProductionFormula,
-            as: "Details",
-            include: ["Silo", "RawMaterial"],
+            as: 'Details',
+            include: ['Silo', 'RawMaterial'],
           },
         ],
       });

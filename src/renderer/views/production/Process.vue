@@ -13,6 +13,7 @@
                   .map((value, key) => ({
                     batchNumber: parseInt(key),
                     groups: value,
+                    StartedUser: value[0].StartedUser,
                   }))"
                 :value="batch.batchNumber"
                 :key="batch.batchNumber"
@@ -21,9 +22,7 @@
             </a-select>
           </div>
           <div>
-            <a-button type="danger" key="close" @click="onCloseClick"
-              >Kapat</a-button
-            >
+            <a-button type="danger" key="close" @click="onCloseClick">Kapat</a-button>
           </div>
         </div>
       </template>
@@ -34,7 +33,9 @@
           <table class="formula-general-information">
             <tr>
               <th style="width: 100px; text-align: right">Formül Adı:</th>
-              <td colspan="7">{{ prodOrder.name }}</td>
+              <td colspan="5">{{ prodOrder.name }}</td>
+              <th style="width: 100px; text-align: right">Başlatan:</th>
+              <td>{{ prodOrder.StartedUser.firstName }} {{ prodOrder.StartedUser.lastName }}</td>
             </tr>
             <tr>
               <th style="width: 100px; text-align: right">Formül No:</th>
@@ -65,15 +66,8 @@
       </a-row>
 
       <!-- Dozaj Grupları -->
-      <a-row
-        :gutter="[4, 4]"
-        v-if="prodOrder !== null && prodOrder.Groups.length > 0"
-      >
-        <a-col
-          :span="24"
-          v-for="batch in filteredGroups"
-          :key="batch.batchNumber"
-        >
+      <a-row :gutter="[4, 4]" v-if="prodOrder !== null && prodOrder.Groups.length > 0">
+        <a-col :span="24" v-for="batch in filteredGroups" :key="batch.batchNumber">
           <a-card :bordered="true" size="small" style="width: 100%">
             <a-card-meta>
               <template #title>
@@ -87,18 +81,15 @@
                   "
                 >
                   <div style="width: 60%">
-                    <h3 style="color: rgb(224, 68, 47)">
-                      Parti : {{ batch.batchNumber }}
-                    </h3>
+                    <h3 style="color: rgb(224, 68, 47)">Parti : {{ batch.batchNumber }}</h3>
                   </div>
+                  <div v-if="batch.StartedUser">Kullanıcı : {{ batch.StartedUser.firstName }} {{ batch.StartedUser.lastName }}</div>
                   <div>
                     <div>
                       <h5>Hedef Miktar : {{ getTargetGrand() }}</h5>
                     </div>
                     <div>
-                      <h5>
-                        Gerçekleşen Miktar : {{ getConsumptionGrand(batch) }}
-                      </h5>
+                      <h5>Gerçekleşen Miktar : {{ getConsumptionGrand(batch) }}</h5>
                     </div>
                   </div>
                   <div>
@@ -112,13 +103,7 @@
                 </div>
               </template>
             </a-card-meta>
-            <table
-              style="width: 100%"
-              v-for="group in ld(batch.groups).orderBy(
-                (x) => x.DosingGroup.row
-              )"
-              :key="group.id"
-            >
+            <table style="width: 100%" v-for="group in ld(batch.groups).orderBy((x) => x.DosingGroup.row)" :key="group.id">
               <thead>
                 <tr>
                   <th>Dozaj Grup</th>
@@ -136,18 +121,12 @@
                 <tr>
                   <td>{{ group.DosingGroup.name }}</td>
                   <td style="text-align: center">
-                    <CheckCircleTwoTone
-                      v-if="group.started"
-                      twoToneColor="#52c41a"
-                    />
+                    <CheckCircleTwoTone v-if="group.started" twoToneColor="#52c41a" />
                     <MinusCircleTwoTone v-else twoToneColor="#eb2f96" />
                   </td>
                   <td>{{ $filters.formatDateTime2(group.startedAt) }}</td>
                   <td style="text-align: center">
-                    <CheckCircleTwoTone
-                      v-if="group.finished"
-                      twoToneColor="#52c41a"
-                    />
+                    <CheckCircleTwoTone v-if="group.finished" twoToneColor="#52c41a" />
                     <MinusCircleTwoTone v-else twoToneColor="#eb2f96" />
                   </td>
                   <td>{{ $filters.formatDateTime2(group.finishedAt) }}</td>
@@ -161,19 +140,13 @@
                 <tr>
                   <td>&nbsp;</td>
                   <td colspan="8" style="padding-bottom: 10px">
-                    <process-detail
-                      :details="group.Details"
-                      :hasDosingError="hasDosingError"
-                    />
+                    <process-detail :details="group.Details" :hasDosingError="hasDosingError" />
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <td
-                    colspan="9"
-                    style="border-bottom: 1px solid rgb(238, 238, 238)"
-                  ></td>
+                  <td colspan="9" style="border-bottom: 1px solid rgb(238, 238, 238)"></td>
                 </tr>
               </tfoot>
             </table>
@@ -185,29 +158,24 @@
 </template>
 
 <script>
-import _ from "lodash";
-import { Button, Col, Row, Card, Icon, Select } from "ant-design-vue";
-import { CheckCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons-vue";
-import { useState, useActions } from "@/store/hooks";
-import {
-  defineComponent,
-  onMounted,
-  computed,
-  reactive,
-} from "@vue/runtime-core";
-import { useRoute, useRouter } from "vue-router";
-import ProcessDetail from "./ProcessDetail.vue";
+import _ from 'lodash';
+import { Button, Col, Row, Card, Icon, Select } from 'ant-design-vue';
+import { CheckCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons-vue';
+import { useState, useActions } from '@/store/hooks';
+import { defineComponent, onMounted, computed, reactive } from '@vue/runtime-core';
+import { useRoute, useRouter } from 'vue-router';
+import ProcessDetail from './ProcessDetail.vue';
 export default defineComponent({
-  name: "ProductionProcess",
+  name: 'ProductionProcess',
   components: {
-    "a-button": Button,
-    "a-row": Row,
-    "a-col": Col,
-    "a-card": Card,
-    "a-card-meta": Card.Meta,
-    "a-icon": Icon,
-    "a-select": Select,
-    "a-select-option": Select.Option,
+    'a-button': Button,
+    'a-row': Row,
+    'a-col': Col,
+    'a-card': Card,
+    'a-card-meta': Card.Meta,
+    'a-icon': Icon,
+    'a-select': Select,
+    'a-select-option': Select.Option,
     ProcessDetail,
     CheckCircleTwoTone,
     MinusCircleTwoTone,
@@ -216,8 +184,8 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const { findByPk } = useActions(["findByPk"], "production");
-    const { model } = useState(["model"], "production");
+    const { findByPk } = useActions(['findByPk'], 'production');
+    const { model } = useState(['model'], 'production');
     const batchNoFilter = reactive({ value: 0 });
 
     //const onCloseClick = () => router.push({ name: "production" });
@@ -256,13 +224,7 @@ export default defineComponent({
         3
       );
 
-    const getConsumptionGrand = (batch) =>
-      _.round(
-        _(batch.groups.flatMap((x) => x.Details)).sumBy(
-          (x) => x.consumptionAmount,
-          3
-        )
-      );
+    const getConsumptionGrand = (batch) => _.round(_(batch.groups.flatMap((x) => x.Details)).sumBy((x) => x.consumptionAmount, 3));
 
     const getDiffGrand = (batch) => {
       const tTotal = getTargetGrand();
@@ -282,9 +244,7 @@ export default defineComponent({
         return 0;
       }
 
-      const formula = model.value.Details.find(
-        (x) => x.siloId === detail.siloId
-      );
+      const formula = model.value.Details.find((x) => x.siloId === detail.siloId);
       const diff = detail.consumptionAmount - formula.amount;
       return Math.abs(diff) > 0 && Math.abs(diff) > formula.tolerance;
     };
@@ -292,7 +252,7 @@ export default defineComponent({
     const filteredGroups = computed(() => {
       const groups = _(model.value.Groups)
         .groupBy((x) => x.batchNumber)
-        .map((value, key) => ({ batchNumber: parseInt(key), groups: value }));
+        .map((value, key) => ({ batchNumber: parseInt(key), groups: value, StartedUser: value.length > 0 ? value[0].StartedUser : null }));
 
       if (batchNoFilter.value !== 0) {
         return groups.filter((x) => x.batchNumber === batchNoFilter.value);
@@ -301,7 +261,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (!route.params.id) {
-        router.push({ name: "production" });
+        router.push({ name: 'production' });
       }
       if (route.params.batchNumber) {
         batchNoFilter.value = parseInt(route.params.batchNumber);

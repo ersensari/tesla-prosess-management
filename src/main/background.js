@@ -1,18 +1,8 @@
-"use strict";
+'use strict';
 
-const {
-  app,
-  protocol,
-  BrowserWindow,
-  Menu,
-  ipcMain,
-  session,
-} = require("electron");
-const { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
-const {
-  default: installExtension,
-  VUEJS3_DEVTOOLS,
-} = require("electron-devtools-installer");
+const { app, protocol, BrowserWindow, Menu, ipcMain, session } = require('electron');
+const { createProtocol } = require('vue-cli-plugin-electron-builder/lib');
+const { default: installExtension, VUEJS3_DEVTOOLS } = require('electron-devtools-installer');
 
 process.setMaxListeners(0);
 
@@ -20,7 +10,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 //const electronLocalshortcut = require("electron-localshortcut");
 //const electron_data = require("electron-data");
-const modules = require("./modules");
+const modules = require('./modules');
 //const { readFile, stat } = require("fs");
 //const miniWindow = require("./modules/miniWindow");
 
@@ -47,13 +37,11 @@ const modules = require("./modules");
 //   }
 // });
 
-const isDevelopment = process.env.NODE_ENV !== "production";
+const isDevelopment = process.env.NODE_ENV !== 'production';
 //let topWindow = null;
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } },
-]);
+protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 // async function createTopWindow() {
 //   let pos = null;
@@ -108,7 +96,7 @@ async function createWindow() {
     width: 1680,
     height: 900,
     minWidth: 1680,
-    icon: "tesla-icon.ico",
+    icon: 'tesla-icon.ico',
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
@@ -126,7 +114,7 @@ async function createWindow() {
   //   createTopWindow();
   // });
 
-  ipcMain.on("openMainWindow", () => {
+  ipcMain.on('openMainWindow', () => {
     win.show();
     win.focus();
     win.maximize();
@@ -139,41 +127,41 @@ async function createWindow() {
       win.webContents.openDevTools();
     }
   } else {
-    createProtocol("app");
+    createProtocol('app');
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    win.loadURL('app://./index.html');
   }
 }
 
 async function setMainMenu() {
   const template = [
     {
-      label: "Tesla Üretim Yönetimi",
+      label: 'Tesla Üretim Yönetimi',
       submenu: [
         {
-          label: "Yenile",
-          role: "reload",
+          label: 'Yenile',
+          role: 'reload',
         },
         {
-          label: "Çıkış",
-          role: "quit",
+          label: 'Çıkış',
+          role: 'quit',
         },
       ],
     },
     {
-      label: "Düzenle",
+      label: 'Düzenle',
       submenu: [
         {
-          label: "Kopyala",
-          role: "copy",
+          label: 'Kopyala',
+          role: 'copy',
         },
         {
-          label: "Kes",
-          role: "cut",
+          label: 'Kes',
+          role: 'cut',
         },
         {
-          label: "Yapıştır",
-          role: "paste",
+          label: 'Yapıştır',
+          role: 'paste',
         },
       ],
     },
@@ -182,17 +170,17 @@ async function setMainMenu() {
 }
 
 // Quit when all windows are closed.
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 
   session.defaultSession.clearStorageData();
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -201,18 +189,18 @@ app.on("activate", () => {
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on("second-instance", (event, commandLine, workingDirectory) => {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
     if (win) {
       if (win.isMinimized()) win.restore();
       win.focus();
     }
   });
 
-  app.on("ready", async () => {
+  app.on('ready', async () => {
     if (isDevelopment) {
       installExtension(VUEJS3_DEVTOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log("An error occurred: ", err));
+        .catch((err) => console.log('An error occurred: ', err));
     }
 
     createWindow();
@@ -223,14 +211,14 @@ if (!gotTheLock) {
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
-  if (process.platform === "win32") {
-    process.on("message", (data) => {
-      if (data === "graceful-exit") {
+  if (process.platform === 'win32') {
+    process.on('message', (data) => {
+      if (data === 'graceful-exit') {
         app.quit();
       }
     });
   } else {
-    process.on("SIGTERM", () => {
+    process.on('SIGTERM', () => {
       app.quit();
     });
   }

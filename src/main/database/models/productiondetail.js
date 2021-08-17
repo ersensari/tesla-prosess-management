@@ -1,19 +1,13 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ProductionDetail extends Model {
     static associate(models) {
-      models.ProductionDetail.ProductionGroup = models.ProductionDetail.belongsTo(
-        models.ProductionGroup
-      );
+      models.ProductionDetail.ProductionGroup = models.ProductionDetail.belongsTo(models.ProductionGroup);
 
-      models.ProductionDetail.Silo = models.ProductionDetail.belongsTo(
-        models.Silo
-      );
+      models.ProductionDetail.Silo = models.ProductionDetail.belongsTo(models.Silo);
 
-      models.ProductionDetail.RawMaterial = models.ProductionDetail.belongsTo(
-        models.RawMaterial
-      );
+      models.ProductionDetail.RawMaterial = models.ProductionDetail.belongsTo(models.RawMaterial);
     }
   }
   ProductionDetail.init(
@@ -29,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "ProductionDetail",
+      modelName: 'ProductionDetail',
     }
   );
   return ProductionDetail;

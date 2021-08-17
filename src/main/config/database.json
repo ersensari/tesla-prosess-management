@@ -14,10 +14,10 @@
     },
     "timezone": "+03:00"
   },
-  "docker-development": {
+  "local-development": {
     "username": "sa",
-    "password": "Ees27121982*",
-    "database": "tesla_tesla",
+    "password": "1",
+    "database": "tesla",
     "dialect": "mssql",
     "host": "localhost",
     "dialectOptions": {
@@ -42,7 +42,7 @@
     },
     "timezone": "+03:00"
   },
-  "--production": {
+  "production": {
     "username": "sa",
     "password": "Tesla2021.",
     "database": "tesla",
@@ -57,7 +57,7 @@
     },
     "timezone": "+03:00"
   },
-  "production": {
+  "--production": {
     "username": "sa",
     "password": "1",
     "database": "tesla",

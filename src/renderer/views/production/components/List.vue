@@ -24,24 +24,14 @@
       :bordered="true"
       size="small"
     >
-      <template
-        #filterDropdown="{
-          setSelectedKeys,
-          selectedKeys,
-          confirm,
-          clearFilters,
-          column,
-        }"
-      >
+      <template #filterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
         <div style="padding: 8px">
           <a-input
             ref="searchInput"
             :placeholder="`Bul: ${column.title}`"
             :value="selectedKeys[0]"
             style="width: 188px; margin-bottom: 8px; display: block"
-            @change="
-              (e) => setSelectedKeys(e.target.value ? [e.target.value] : [])
-            "
+            @change="(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
             @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
           />
           <a-button
@@ -53,13 +43,7 @@
             <template #icon><SearchOutlined /></template>
             Bul
           </a-button>
-          <a-button
-            size="small"
-            style="width: 90px"
-            @click="handleReset(clearFilters)"
-          >
-            Temizle
-          </a-button>
+          <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)"> Temizle </a-button>
         </div>
       </template>
       <template #filterIcon="filtered">
@@ -67,16 +51,8 @@
       </template>
       <template #customRender="{ text, column }">
         <span v-if="searchText && searchedColumn === column.dataIndex">
-          <template
-            v-for="(fragment, i) in text
-              .toString()
-              .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-          >
-            <mark
-              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-              class="highlight"
-              :key="i"
-            >
+          <template v-for="(fragment, i) in text.toString().split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))">
+            <mark v-if="fragment.toLowerCase() === searchText.toLowerCase()" class="highlight" :key="i">
               {{ fragment }}
             </mark>
             <template v-else>{{ fragment }}</template>
@@ -92,12 +68,7 @@
           <template #title>
             <span>Yeni Formül Ekle</span>
           </template>
-          <a-button
-            type="primary"
-            shape="circle"
-            size="small"
-            @click="onNewClick"
-          >
+          <a-button type="primary" shape="circle" size="small" @click="onNewClick">
             <template #icon><PlusCircleOutlined /></template>
           </a-button>
         </a-tooltip>
@@ -107,12 +78,8 @@
           <a-tooltip placement="topLeft">
             <template #title>
               <span v-if="record.selected">Üretim emri SCADA'ya bağlandı.</span>
-              <span v-else-if="productionHasStarted(record)"
-                >Üretim devam ediyor.</span
-              >
-              <span v-else-if="productionHasFinished(record)"
-                >Üretim tamamlandı.</span
-              >
+              <span v-else-if="productionHasStarted(record)">Üretim devam ediyor.</span>
+              <span v-else-if="productionHasFinished(record)">Üretim tamamlandı.</span>
               <span v-else>Üretim başlatmak için SCADA'ya bağlayın!</span>
             </template>
 
@@ -124,26 +91,13 @@
                 backgroundColor: record.selected ? 'lime' : '',
                 color: 'black',
               }"
-              :disabled="
-                productionHasStarted(record) ||
-                productionHasFinished(record) ||
-                record.selected
-              "
+              :disabled="productionHasStarted(record) || productionHasFinished(record) || record.selected"
               @click="onSelectOrder(record.id)"
             >
               <template #icon>
-                <SyncOutlined
-                  spin
-                  v-if="
-                    productionHasStarted(record) &&
-                    !productionHasFinished(record)
-                  "
-                  style="color: green"
-                />
+                <SyncOutlined spin v-if="productionHasStarted(record) && !productionHasFinished(record)" style="color: green" />
                 <LinkOutlined v-else-if="record.selected" />
-                <SafetyCertificateTwoTone
-                  v-else-if="productionHasFinished(record)"
-                />
+                <SafetyCertificateTwoTone v-else-if="productionHasFinished(record)" />
                 <ApiOutlined v-else />
               </template>
             </a-button>
@@ -157,9 +111,7 @@
               shape="circle"
               size="small"
               title="Üretim Süreç Takibi"
-              :disabled="
-                !productionHasStarted(record) && !productionHasFinished(record)
-              "
+              :disabled="!productionHasStarted(record) && !productionHasFinished(record)"
               @click="onOpenDetailClick(record.id)"
             >
               <template #icon><ClusterOutlined /></template>
@@ -175,9 +127,7 @@
               shape="circle"
               size="small"
               title="Düzenle"
-              :disabled="
-                productionHasStarted(record) || productionHasFinished(record)
-              "
+              :disabled="productionHasStarted(record) || productionHasFinished(record)"
               @click="onEditClick(record)"
             >
               <template #icon><EditOutlined /></template>
@@ -186,23 +136,14 @@
           <a-popconfirm
             title="Silmek istediğinizden emin misiniz?"
             @confirm="onDeleteClick(record.id)"
-            :disabled="
-              productionHasStarted(record) || productionHasFinished(record)
-            "
+            :disabled="productionHasStarted(record) || productionHasFinished(record)"
           >
             <a-tooltip placement="topLeft">
               <template #title>
                 <span>Sil</span>
               </template>
 
-              <a-button
-                type="danger"
-                shape="circle"
-                size="small"
-                :disabled="
-                  productionHasStarted(record) || productionHasFinished(record)
-                "
-              >
+              <a-button type="danger" shape="circle" size="small" :disabled="productionHasStarted(record) || productionHasFinished(record)">
                 <template #icon><DeleteOutlined /></template>
               </a-button>
             </a-tooltip>
@@ -224,26 +165,20 @@
       <template #consumptionTotal="{ record }">
         {{ getConsumptionTotal(record) }}
       </template>
-      <template #batchInfo="{ record }">
-        {{ getActiveBatch(record) }} / {{ record.batchCount }}
-      </template>
+      <template #batchInfo="{ record }"> {{ getActiveBatch(record) }} / {{ record.batchCount }} </template>
+      <template #startedUser="{ record }"
+        ><span v-if="record.StartedUser">{{ record.StartedUser.firstName }} {{ record.StartedUser.lastName }} </span></template
+      >
     </a-table>
   </div>
 </template>
 
 <script>
-import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
-import _ from "lodash";
-import { useRouter } from "vue-router";
-import { defineComponent, onMounted, ref, reactive, watch } from "vue";
-import {
-  Table,
-  Button,
-  Input,
-  Popconfirm,
-  Tooltip,
-  DatePicker,
-} from "ant-design-vue";
+import locale from 'ant-design-vue/es/date-picker/locale/tr_TR';
+import _ from 'lodash';
+import { useRouter } from 'vue-router';
+import { defineComponent, onMounted, ref, reactive, watch } from 'vue';
+import { Table, Button, Input, Popconfirm, Tooltip, DatePicker } from 'ant-design-vue';
 import {
   SearchOutlined,
   DeleteOutlined,
@@ -254,17 +189,17 @@ import {
   ApiOutlined,
   SyncOutlined,
   SafetyCertificateTwoTone,
-} from "@ant-design/icons-vue";
-import { useState, useActions, useMutations } from "@/store/hooks";
+} from '@ant-design/icons-vue';
+import { useState, useActions, useMutations } from '@/store/hooks';
 export default defineComponent({
-  name: "List",
+  name: 'List',
   components: {
-    "a-table": Table,
-    "a-button": Button,
-    "a-input": Input,
-    "a-popconfirm": Popconfirm,
-    "a-tooltip": Tooltip,
-    "a-date-picker": DatePicker,
+    'a-table': Table,
+    'a-button': Button,
+    'a-input': Input,
+    'a-popconfirm': Popconfirm,
+    'a-tooltip': Tooltip,
+    'a-date-picker': DatePicker,
     SearchOutlined,
     DeleteOutlined,
     EditOutlined,
@@ -276,23 +211,19 @@ export default defineComponent({
     SafetyCertificateTwoTone,
   },
   setup() {
-    const searchText = ref("");
-    const searchedColumn = ref("");
+    const searchText = ref('');
+    const searchedColumn = ref('');
     const searchInput = ref();
     const filterMethods = (columnName) => {
       return {
         slots: {
-          filterDropdown: "filterDropdown",
-          filterIcon: "filterIcon",
-          customRender: "customRender",
+          filterDropdown: 'filterDropdown',
+          filterIcon: 'filterIcon',
+          customRender: 'customRender',
         },
         sorter: (a, b) => a[columnName].length - b[columnName].length,
-        sortDirections: ["descend", "ascend"],
-        onFilter: (value, record) =>
-          record[columnName]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase()),
+        sortDirections: ['descend', 'ascend'],
+        onFilter: (value, record) => record[columnName].toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -306,105 +237,114 @@ export default defineComponent({
     const columns = [
       {
         width: 135,
-        key: "operations",
-        slots: { customRender: "operations", title: "newButton" },
-        align: "center",
+        key: 'operations',
+        slots: { customRender: 'operations', title: 'newButton' },
+        align: 'center',
       },
       {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
         width: 90,
-        ...filterMethods("id"),
+        ...filterMethods('id'),
       },
       {
-        title: "Ver.",
-        dataIndex: "version",
-        key: "version",
+        title: 'Ver.',
+        dataIndex: 'version',
+        key: 'version',
         width: 40,
-        align: "center",
+        align: 'center',
       },
       {
-        title: "Formül No",
-        dataIndex: "formulaNo",
-        key: "formulaNo",
+        title: 'Formül No',
+        dataIndex: 'formulaNo',
+        key: 'formulaNo',
         width: 120,
-        ...filterMethods("formulaNo"),
+        ...filterMethods('formulaNo'),
       },
 
       {
-        title: "SAP Kodu",
-        dataIndex: "sapCode",
-        key: "sapCode",
+        title: 'SAP Kodu',
+        dataIndex: 'sapCode',
+        key: 'sapCode',
         width: 120,
-        ...filterMethods("sapCode"),
+        ...filterMethods('sapCode'),
       },
       {
-        title: "Formül Adı",
-        dataIndex: "name",
-        key: "name",
+        title: 'Formül Adı',
+        dataIndex: 'name',
+        key: 'name',
         ellipsis: true,
 
-        ...filterMethods("name"),
+        ...filterMethods('name'),
       },
       {
-        title: "Üretim Tarihi",
-        dataIndex: "productionDate",
-        key: "productionDate",
+        title: 'Üretim Tarihi',
+        dataIndex: 'productionDate',
+        key: 'productionDate',
         width: 100,
         slots: {
-          customRender: "productionDate",
+          customRender: 'productionDate',
         },
       },
       {
-        title: "Başlama Zamanı",
-        dataIndex: "startedAt",
-        key: "startedAt",
+        title: 'Başlama Zamanı',
+        dataIndex: 'startedAt',
+        key: 'startedAt',
         width: 140,
         slots: {
-          customRender: "startedAt",
+          customRender: 'startedAt',
         },
       },
       {
-        title: "Bitiş Zamanı",
-        dataIndex: "finishedAt",
-        key: "finishedAt",
+        title: 'Bitiş Zamanı',
+        dataIndex: 'finishedAt',
+        key: 'finishedAt',
         width: 140,
         slots: {
-          customRender: "finishedAt",
+          customRender: 'finishedAt',
         },
       },
       {
-        title: "Parti Sayısı",
-        dataIndex: "batchCount",
-        key: "batchCount",
+        title: 'Parti Sayısı',
+        dataIndex: 'batchCount',
+        key: 'batchCount',
         width: 100,
         slots: {
-          customRender: "batchInfo",
+          customRender: 'batchInfo',
         },
       },
       {
-        title: "Toplamlar",
+        title: 'Toplamlar',
         children: [
           {
-            title: "Hedef",
-            dataIndex: "targetTotal",
-            key: "targetTotal",
+            title: 'Hedef',
+            dataIndex: 'targetTotal',
+            key: 'targetTotal',
             width: 100,
             slots: {
-              customRender: "targetTotal",
+              customRender: 'targetTotal',
             },
           },
           {
-            title: "Üretilen",
-            dataIndex: "consumptionTotal",
-            key: "consumptionTotal",
+            title: 'Üretilen',
+            dataIndex: 'consumptionTotal',
+            key: 'consumptionTotal',
             width: 100,
             slots: {
-              customRender: "consumptionTotal",
+              customRender: 'consumptionTotal',
             },
           },
         ],
+      },
+      {
+        title: 'Başlatan Kullanıcı',
+        dataIndex: 'startedBy',
+        key: 'startedBy',
+        width: 150,
+        slots: {
+          customRender: 'startedUser',
+        },
       },
     ];
 
@@ -416,7 +356,7 @@ export default defineComponent({
 
     const handleReset = (clearFilters) => {
       clearFilters();
-      searchText.value = "";
+      searchText.value = '';
     };
 
     const onNewClick = () => {
@@ -457,22 +397,16 @@ export default defineComponent({
     };
 
     const router = useRouter();
-    const { prodOrders, filterDate } = useState(
-      ["prodOrders", "filterDate"],
-      "production"
-    );
-    const { findAll, remove, selectOrder } = useActions(
-      ["findAll", "save", "update", "remove", "selectOrder"],
-      "production"
-    );
+    const { prodOrders, filterDate } = useState(['prodOrders', 'filterDate'], 'production');
+    const { findAll, remove, selectOrder } = useActions(['findAll', 'save', 'update', 'remove', 'selectOrder'], 'production');
 
-    const { setFormMode } = useMutations(["setFormMode"], "production");
+    const { setFormMode } = useMutations(['setFormMode'], 'production');
 
     const productionHasStarted = (prod) => prod.startedAt && !prod.finishedAt;
     const productionHasFinished = (prod) => prod.finishedAt;
 
     const onOpenDetailClick = (id) => {
-      router.push({ name: "production-process", params: { id } });
+      router.push({ name: 'production-process', params: { id } });
     };
 
     const onSelectOrder = (id) => {

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("ProductionGroups", {
+    await queryInterface.createTable('ProductionGroups', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,13 +11,13 @@ module.exports = {
       },
       productionId: {
         type: Sequelize.INTEGER,
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
         references: {
           model: {
-            tableName: "Productions",
-            schema: "dbo",
+            tableName: 'Productions',
+            schema: 'dbo',
           },
-          key: "id",
+          key: 'id',
         },
         allowNull: false,
       },
@@ -25,10 +25,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: "DosingGroups",
-            schema: "dbo",
+            tableName: 'DosingGroups',
+            schema: 'dbo',
           },
-          key: "id",
+          key: 'id',
         },
         allowNull: false,
       },
@@ -63,14 +63,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      startedBy: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
     });
-    await queryInterface.addConstraint("ProductionGroups", {
-      fields: ["batchNumber", "productionId", "groupId"],
-      type: "unique",
-      name: "UK_ProductionGroups",
+    await queryInterface.addConstraint('ProductionGroups', {
+      fields: ['batchNumber', 'productionId', 'groupId'],
+      type: 'unique',
+      name: 'UK_ProductionGroups',
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("ProductionGroups");
+    await queryInterface.dropTable('ProductionGroups');
   },
 };

@@ -1,26 +1,24 @@
-"use strict";
-const { Model } = require("sequelize");
-const moment = require("moment");
-const db = require("..");
+'use strict';
+const { Model } = require('sequelize');
+const moment = require('moment');
+const db = require('..');
 module.exports = (sequelize, DataTypes) => {
   class Production extends Model {
     static associate(models) {
-      models.Production.Groups = models.Production.hasMany(
-        models.ProductionGroup,
-        {
-          as: "Groups",
-          foreignKey: "productionId",
-          onDelete: "CASCADE",
-        }
-      );
-      models.Production.Details = models.Production.hasMany(
-        models.ProductionFormula,
-        {
-          as: "Details",
-          foreignKey: "productionId",
-          onDelete: "CASCADE",
-        }
-      );
+      models.Production.Groups = models.Production.hasMany(models.ProductionGroup, {
+        as: 'Groups',
+        foreignKey: 'productionId',
+        onDelete: 'CASCADE',
+      });
+      models.Production.Details = models.Production.hasMany(models.ProductionFormula, {
+        as: 'Details',
+        foreignKey: 'productionId',
+        onDelete: 'CASCADE',
+      });
+      models.Production.StartedUser = models.Production.belongsTo(models.User, {
+        foreignKey: 'startedBy',
+        as: 'StartedUser',
+      });
     }
   }
 
@@ -34,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       formulaDate: {
         type: DataTypes.DATE,
         get() {
-          return moment(this.getDataValue("formulaDate"))._d;
+          return moment(this.getDataValue('formulaDate'))._d;
         },
       },
       sapCode: DataTypes.STRING,
@@ -52,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       productionDate: {
         type: DataTypes.DATE,
         get() {
-          return moment(this.getDataValue("productionDate"))._d;
+          return moment(this.getDataValue('productionDate'))._d;
         },
       },
       productionAmount: DataTypes.DECIMAL(10, 3),
@@ -60,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
       startedAt: {
         type: DataTypes.DATE,
         get() {
-          const date = this.getDataValue("startedAt");
+          const date = this.getDataValue('startedAt');
           if (date) return moment(date)._d;
           else return null;
         },
@@ -68,15 +66,16 @@ module.exports = (sequelize, DataTypes) => {
       finishedAt: {
         type: DataTypes.DATE,
         get() {
-          const date = this.getDataValue("finishedAt");
+          const date = this.getDataValue('finishedAt');
           if (date) return moment(date)._d;
           else return null;
         },
       },
+      startedBy: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Production",
+      modelName: 'Production',
     }
   );
   return Production;

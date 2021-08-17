@@ -79,139 +79,144 @@
   </div>
 </template>
 <script>
-import locale from "ant-design-vue/es/date-picker/locale/tr_TR";
-import { round } from "lodash";
-import { defineComponent, inject, reactive, ref } from "vue";
-const excel = () => import("@/components/Export2Excel");
-import {
-  Table,
-  Button,
-  Input,
-  Popconfirm,
-  Tooltip,
-  DatePicker,
-} from "ant-design-vue";
-import { FileExcelOutlined } from "@ant-design/icons-vue";
-import { useState, useActions } from "@/store/hooks";
+import locale from 'ant-design-vue/es/date-picker/locale/tr_TR';
+import { round } from 'lodash';
+import { defineComponent, inject, reactive, ref } from 'vue';
+const excel = () => import('@/components/Export2Excel');
+import { Table, Button, Input, Popconfirm, Tooltip, DatePicker } from 'ant-design-vue';
+import { FileExcelOutlined } from '@ant-design/icons-vue';
+import { useState, useActions } from '@/store/hooks';
 export default defineComponent({
-  name: "FlatProduction",
+  name: 'FlatProduction',
   components: {
-    "a-table": Table,
-    "a-button": Button,
-    "a-input": Input,
-    "a-popconfirm": Popconfirm,
-    "a-tooltip": Tooltip,
-    "a-date-picker": DatePicker,
+    'a-table': Table,
+    'a-button': Button,
+    'a-input': Input,
+    'a-popconfirm': Popconfirm,
+    'a-tooltip': Tooltip,
+    'a-date-picker': DatePicker,
     FileExcelOutlined,
   },
   setup() {
     const columns = [
       {
-        title: "ID",
-        dataIndex: "productionId",
-        key: "productionId",
+        title: 'ID',
+        dataIndex: 'productionId',
+        key: 'productionId',
         width: 60,
         slots: {
-          customRender: "detailClickRender",
+          customRender: 'detailClickRender',
         },
       },
       {
-        title: "Ver.",
-        dataIndex: "version",
-        key: "version",
+        title: 'Ver.',
+        dataIndex: 'version',
+        key: 'version',
         width: 40,
-        align: "center",
+        align: 'center',
       },
       {
-        title: "Formül No",
-        dataIndex: "formulaNo",
-        key: "formulaNo",
+        title: 'Formül No',
+        dataIndex: 'formulaNo',
+        key: 'formulaNo',
         width: 120,
       },
 
       {
-        title: "SAP Kodu",
-        dataIndex: "sapCode",
-        key: "sapCode",
+        title: 'SAP Kodu',
+        dataIndex: 'sapCode',
+        key: 'sapCode',
         width: 120,
       },
       {
-        title: "Formül Adı",
-        dataIndex: "name",
-        key: "name",
+        title: 'Formül Adı',
+        dataIndex: 'name',
+        key: 'name',
         ellipsis: true,
       },
       {
-        title: "Üretim Tarihi",
-        dataIndex: "productionDate",
-        key: "productionDate",
+        title: 'Üretim Tarihi',
+        dataIndex: 'productionDate',
+        key: 'productionDate',
         width: 100,
         slots: {
-          customRender: "productionDate",
+          customRender: 'productionDate',
         },
       },
       {
-        title: "Başlama Zamanı",
-        dataIndex: "startedAt",
-        key: "startedAt",
+        title: 'Başlama Zamanı',
+        dataIndex: 'startedAt',
+        key: 'startedAt',
         width: 120,
         slots: {
-          customRender: "startedAt",
+          customRender: 'startedAt',
         },
       },
       {
-        title: "Bitiş Zamanı",
-        dataIndex: "finishedAt",
-        key: "finishedAt",
+        title: 'Bitiş Zamanı',
+        dataIndex: 'finishedAt',
+        key: 'finishedAt',
         width: 120,
         slots: {
-          customRender: "finishedAt",
+          customRender: 'finishedAt',
         },
       },
       {
-        title: "Geçen Süre(sn)",
-        dataIndex: "passedTime",
-        key: "passedTime",
+        title: 'Geçen Süre(sn)',
+        dataIndex: 'passedTime',
+        key: 'passedTime',
         width: 70,
       },
       {
-        title: "Toplam Parti",
-        dataIndex: "batchCount",
-        key: "batchCount",
+        title: 'Toplam Parti',
+        dataIndex: 'batchCount',
+        key: 'batchCount',
         width: 100,
         slots: {
-          customRender: "batchInfo",
+          customRender: 'batchInfo',
         },
       },
       {
-        title: "Parti",
-        dataIndex: "batchNumber",
-        key: "batchNumber",
+        title: 'Parti',
+        dataIndex: 'batchNumber',
+        key: 'batchNumber',
         width: 60,
       },
       {
-        title: "Genel Parti",
-        dataIndex: "general_batchNumber",
-        key: "general_batchNumber",
+        title: 'Genel Parti',
+        dataIndex: 'general_batchNumber',
+        key: 'general_batchNumber',
         width: 60,
       },
       {
-        title: "Hedef Miktar",
-        dataIndex: "targetTotal",
-        key: "targetTotal",
+        title: 'Hedef Miktar',
+        dataIndex: 'targetTotal',
+        key: 'targetTotal',
         width: 100,
         slots: {
-          customRender: "targetTotal",
+          customRender: 'targetTotal',
         },
       },
       {
-        title: "Üretilen Miktar",
-        dataIndex: "consumptionTotal",
-        key: "consumptionTotal",
+        title: 'Üretilen Miktar',
+        dataIndex: 'consumptionTotal',
+        key: 'consumptionTotal',
         width: 100,
         slots: {
-          customRender: "consumptionTotal",
+          customRender: 'consumptionTotal',
         },
+      },
+      {
+        title: 'Başlatan',
+        dataIndex: 'started_username',
+        key: 'username',
+        width: 150,
+      },
+      {
+        title: 'Bilgi Alan',
+        dataIndex: 'username',
+        key: 'username',
+        width: 150,
       },
     ];
     const endOpen = ref(false);
@@ -241,11 +246,8 @@ export default defineComponent({
       endOpen.value = open;
     };
 
-    const { criteria } = useState(["criteria"], "reports");
-    const { flatProductionList } = useActions(
-      ["flatProductionList"],
-      "reports"
-    );
+    const { criteria } = useState(['criteria'], 'reports');
+    const { flatProductionList } = useActions(['flatProductionList'], 'reports');
 
     const state = reactive({
       result: [],
@@ -264,61 +266,44 @@ export default defineComponent({
 
       excel().then((excel) => {
         excel.export_json_to_excel({
-          merges: ["A1:N1", "A2:B2", "C2:N2"],
+          merges: ['A1:N1', 'A2:B2', 'C2:N2'],
           multiHeader: [
+            ['ÜRETİM RAPORU', '', '', '', '', '', '', '', '', '', '', '', '', ''],
             [
-              "ÜRETİM RAPORU",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-            ],
-            [
-              "Başlama - Bitiş Zamanı :",
-              "",
-              filters.formatDateTime(criteria.value.beginDate) +
-                " - " +
-                filters.formatDateTime(criteria.value.endDate),
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
+              'Başlama - Bitiş Zamanı :',
+              '',
+              filters.formatDateTime(criteria.value.beginDate) + ' - ' + filters.formatDateTime(criteria.value.endDate),
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
             ],
           ],
           header: tHeader, //Header Required
           data: formatJson(filterVal, state.result), //Specific data Required
-          filename: "flat-production-list", //Optional
+          filename: 'flat-production-list', //Optional
           autoWidth: true, //Optional
-          bookType: "xlsx", //Optional
+          bookType: 'xlsx', //Optional
         });
       });
     };
 
-    const filters = inject("filters");
+    const filters = inject('filters');
     const formatJson = (filterVal, jsonData) => {
       return jsonData.map((v) =>
         filterVal.map((j) => {
           switch (j) {
-            case "productionDate":
+            case 'productionDate':
               return filters.formatDate(v[j]);
-            case "startedAt":
-            case "finishedAt":
+            case 'startedAt':
+            case 'finishedAt':
               return filters.formatDateTime2(v[j]);
             default:
               return v[j];

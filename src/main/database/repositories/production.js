@@ -1,15 +1,12 @@
-const db = require("../index");
-const { Op } = require("sequelize");
-const moment = require("moment");
+const db = require('../index');
+const { Op } = require('sequelize');
+const moment = require('moment');
 module.exports = {
   queries: {
     findAll: async (criteria) => {
       let endDate =
         criteria.beginDate === criteria.endDate
-          ? moment(criteria.beginDate)
-              .add(23, "hours")
-              .add(59, "minutes")
-              .format("YYYY-MM-DD HH:mm")
+          ? moment(criteria.beginDate).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DD HH:mm')
           : criteria.endDate;
 
       const whereClause = {
@@ -18,46 +15,44 @@ module.exports = {
             criteria && criteria.beginDate
               ? {
                   [Op.between]: [
-                    new Date(
-                      moment(criteria.beginDate).format("YYYY-MM-DD HH:mm")
-                    ),
-                    new Date(moment(endDate).format("YYYY-MM-DD HH:mm")),
+                    new Date(moment(criteria.beginDate).format('YYYY-MM-DD HH:mm')),
+                    new Date(moment(endDate).format('YYYY-MM-DD HH:mm')),
                   ],
                 }
               : {
-                  [Op.gte]: new Date(
-                    moment().add(-1, "weeks").format("YYYY-MM-DD HH:mm")
-                  ),
+                  [Op.gte]: new Date(moment().add(-1, 'weeks').format('YYYY-MM-DD HH:mm')),
                 },
         },
       };
       const result = await db.Production.findAll({
         ...whereClause,
         order: [
-          ["productionDate", "DESC"],
-          ["createdAt", "DESC"],
+          ['productionDate', 'DESC'],
+          ['createdAt', 'DESC'],
         ],
         include: [
+          'StartedUser',
           {
             model: db.ProductionFormula,
-            as: "Details",
+            as: 'Details',
             include: [
               {
                 model: db.Silo,
-                include: ["RawMaterial"],
+                include: ['RawMaterial'],
               },
-              "RawMaterial",
+              'RawMaterial',
             ],
           },
           {
             model: db.ProductionGroup,
-            as: "Groups",
+            as: 'Groups',
             include: [
-              "DosingGroup",
+              'StartedUser',
+              'DosingGroup',
               {
                 model: db.ProductionDetail,
-                as: "Details",
-                include: ["Silo", "RawMaterial"],
+                as: 'Details',
+                include: ['Silo', 'RawMaterial'],
               },
             ],
           },
@@ -69,30 +64,32 @@ module.exports = {
     findByPk: async (id) => {
       return await db.Production.findByPk(id, {
         include: [
+          'StartedUser',
           {
             model: db.ProductionGroup,
-            as: "Groups",
+            as: 'Groups',
             include: [
+              'StartedUser',
               {
                 model: db.DosingGroup,
               },
               {
                 model: db.ProductionDetail,
-                as: "Details",
+                as: 'Details',
                 include: [
                   {
                     model: db.Silo,
-                    include: ["RawMaterial"],
+                    include: ['RawMaterial'],
                   },
-                  "RawMaterial",
+                  'RawMaterial',
                 ],
               },
             ],
           },
           {
             model: db.ProductionFormula,
-            as: "Details",
-            include: ["Silo", "RawMaterial"],
+            as: 'Details',
+            include: ['Silo', 'RawMaterial'],
           },
         ],
       });
@@ -100,7 +97,7 @@ module.exports = {
     getActiveOrder: async () => {
       return await db.Production.findAll({
         limit: 1,
-        order: [["createdAt", "DESC"]],
+        order: [['createdAt', 'DESC']],
         where: {
           startedAt: {
             [Op.ne]: null,
@@ -112,28 +109,28 @@ module.exports = {
         include: [
           {
             model: db.ProductionGroup,
-            as: "Groups",
+            as: 'Groups',
             include: [
               {
                 model: db.DosingGroup,
               },
               {
                 model: db.ProductionDetail,
-                as: "Details",
+                as: 'Details',
                 include: [
                   {
                     model: db.Silo,
-                    include: ["RawMaterial"],
+                    include: ['RawMaterial'],
                   },
-                  "RawMaterial",
+                  'RawMaterial',
                 ],
               },
             ],
           },
           {
             model: db.ProductionFormula,
-            as: "Details",
-            include: ["Silo", "RawMaterial"],
+            as: 'Details',
+            include: ['Silo', 'RawMaterial'],
           },
         ],
       }).then((items) => {
@@ -155,7 +152,7 @@ module.exports = {
         include: [
           {
             model: db.ProductionFormula,
-            as: "Details",
+            as: 'Details',
           },
         ],
       }).catch((err) => console.log(err));
@@ -170,13 +167,11 @@ module.exports = {
 
     selectOrder: async (id) => {
       db.sequelize
-        .query("UPDATE productions SET selected=0 WHERE id != " + id)
+        .query('UPDATE productions SET selected=0 WHERE id != ' + id)
         .then(() => {
-          db.sequelize
-            .query("UPDATE productions SET selected=1 WHERE id = " + id)
-            .catch((err) => {
-              console.log(err);
-            });
+          db.sequelize.query('UPDATE productions SET selected=1 WHERE id = ' + id).catch((err) => {
+            console.log(err);
+          });
         })
         .catch((err) => {
           console.log(err);

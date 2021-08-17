@@ -1,163 +1,148 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
-    path: "/access-denied",
-    name: "access-denied",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/user/AccessDenied.vue"),
+    path: '/access-denied',
+    name: 'access-denied',
+    component: () => import(/* webpackChunkName: "login" */ '../views/user/AccessDenied.vue'),
     meta: {
       roles: {
-        viewers: ["all"],
+        viewers: ['all'],
       },
     },
   },
   {
-    path: "/",
-    component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue"),
-    name: "home",
+    path: '/',
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+    name: 'home',
     meta: {
-      key: "1",
-      title: "Gösterge Paneli",
+      key: '1',
+      title: 'Gösterge Paneli',
       roles: {
-        viewers: ["all"],
-      },
-    },
-  },
-
-  {
-    path: "/raw-materials",
-    name: "raw-materials",
-    component: () =>
-      import(
-        /* webpackChunkName: "raw-materials" */ "../views/RawMaterials.vue"
-      ),
-    meta: {
-      key: "2",
-      title: "Hammaddeler",
-      roles: {
-        modifiers: ["admin", "supervizor"],
-        viewers: ["operator", "manager"],
-      },
-    },
-  },
-  {
-    path: "/silos",
-    name: "silos",
-    component: () =>
-      import(/* webpackChunkName: "silos" */ "../views/Silos.vue"),
-    meta: {
-      key: "3",
-      title: "Silo Tanımları",
-      roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ['all'],
       },
     },
   },
 
   {
-    path: "/formulas",
-    name: "formulas",
-    component: () =>
-      import(/* webpackChunkName: "formulas" */ "../views/Formulas.vue"),
+    path: '/raw-materials',
+    name: 'raw-materials',
+    component: () => import(/* webpackChunkName: "raw-materials" */ '../views/RawMaterials.vue'),
     meta: {
-      key: "4",
-      title: "Formüller",
+      key: '2',
+      title: 'Hammaddeler',
       roles: {
-        modifiers: ["admin", "supervizor"],
-        viewers: ["operator", "manager"],
+        viewers: ['admin'],
       },
     },
   },
   {
-    path: "/production",
-    name: "production",
-    component: () =>
-      import(/* webpackChunkName: "production" */ "../views/production/Index"),
+    path: '/silos',
+    name: 'silos',
+    component: () => import(/* webpackChunkName: "silos" */ '../views/Silos.vue'),
     meta: {
-      key: "5",
-      title: "Üretim",
+      key: '3',
+      title: 'Silo Tanımları',
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ['admin'],
+      },
+    },
+  },
+
+  {
+    path: '/formulas',
+    name: 'formulas',
+    component: () => import(/* webpackChunkName: "formulas" */ '../views/Formulas.vue'),
+    meta: {
+      key: '4',
+      title: 'Formüller',
+      roles: {
+        viewers: ['admin'],
       },
     },
   },
   {
-    path: "/production/process/:id/:batchNumber?",
-    name: "production-process",
-    component: () =>
-      import(
-        /* webpackChunkName: "production-process" */ "../views/production/Process"
-      ),
+    path: '/production',
+    name: 'production',
+    component: () => import(/* webpackChunkName: "production" */ '../views/production/Index'),
+    meta: {
+      key: '5',
+      title: 'Üretim',
+      roles: {
+        viewers: ['admin', 'operator'],
+      },
+    },
+  },
+  {
+    path: '/production/process/:id/:batchNumber?',
+    name: 'production-process',
+    component: () => import(/* webpackChunkName: "production-process" */ '../views/production/Process'),
     props: true,
     meta: {
-      key: "5-6",
-      title: "Üretim Süreç Takip",
+      key: '5-6',
+      title: 'Üretim Süreç Takip',
       roles: {
-        modifiers: ["admin", "supervizor", "operator"],
-        viewers: ["manager"],
+        viewers: ['admin', 'operator'],
       },
     },
   },
   {
-    path: "/reports/flat-production",
-    name: "reports-flat-production",
-    component: () =>
-      import(
-        /* webpackChunkName: "reports-flat-production" */ "../views/reports/FlatProduction"
-      ),
+    path: '/reports/flat-production',
+    name: 'reports-flat-production',
+    component: () => import(/* webpackChunkName: "reports-flat-production" */ '../views/reports/FlatProduction'),
     meta: {
-      key: "6",
-      title: "Üretim Raporu",
+      key: '6',
+      title: 'Üretim Raporu',
       roles: {
-        viewers: ["admin", "supervizor", "operator", "manager"],
+        viewers: ['admin', 'kalitekontrol', 'operator'],
       },
     },
   },
   {
-    path: "/reports/basic-production",
-    name: "reports-basic-production",
-    component: () =>
-      import(
-        /* webpackChunkName: "reports-basic-production" */ "../views/reports/BasicProduction"
-      ),
+    path: '/reports/basic-production',
+    name: 'reports-basic-production',
+    component: () => import(/* webpackChunkName: "reports-basic-production" */ '../views/reports/BasicProduction'),
     meta: {
-      key: "7",
-      title: "Temel Üretim Raporu",
+      key: '7',
+      title: 'Temel Üretim Raporu',
       roles: {
-        viewers: ["admin", "supervizor", "operator", "manager"],
+        viewers: ['admin', 'kalitekontrol', 'operator'],
       },
     },
   },
   {
-    path: "/reports/detailed-production",
-    name: "reports-detailed-production",
-    component: () =>
-      import(
-        /* webpackChunkName: "reports-detailed-production" */ "../views/reports/DetailedProduction"
-      ),
+    path: '/reports/detailed-production',
+    name: 'reports-detailed-production',
+    component: () => import(/* webpackChunkName: "reports-detailed-production" */ '../views/reports/DetailedProduction'),
     meta: {
-      key: "8",
-      title: "Detaylı Üretim Raporu",
+      key: '8',
+      title: 'Detaylı Üretim Raporu',
       roles: {
-        viewers: ["admin", "supervizor", "operator", "manager"],
+        viewers: ['admin', 'kalitekontrol', 'operator'],
       },
     },
   },
   {
-    path: "/reports/consumed-raw-material",
-    name: "reports-consumed-raw-material",
-    component: () =>
-      import(
-        /* webpackChunkName: "consumed-raw-material" */ "../views/reports/ConsumedRawMaterial"
-      ),
+    path: '/reports/consumed-raw-material',
+    name: 'reports-consumed-raw-material',
+    component: () => import(/* webpackChunkName: "consumed-raw-material" */ '../views/reports/ConsumedRawMaterial'),
     meta: {
-      key: "9",
-      title: "Tüketilen Hammadde Raporu",
+      key: '9',
+      title: 'Tüketilen Hammadde Raporu',
       roles: {
-        viewers: ["admin", "supervizor", "operator", "manager"],
+        viewers: ['admin', 'kalitekontrol', 'operator'],
+      },
+    },
+  },
+  {
+    path: '/user/user-management',
+    name: 'user-management',
+    component: () => import(/* webpackChunkName: "user-management" */ '../views/user/UserManagement'),
+    meta: {
+      key: '10',
+      title: 'Kullanıcı Yönetimi',
+      roles: {
+        viewers: ['admin'],
       },
     },
   },
